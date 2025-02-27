@@ -1,0 +1,23 @@
+/* Add this to the CSS you provided */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.8); /* Start smaller and fade in */
+  }
+  50% {
+    transform: translateY(10px) scale(1.05); /* Slight scale-up effect for added smoothness */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1); /* Final state, normal size and position */
+  }
+}
+
+.congratulationsText {
+  font-size: 24px;
+  font-weight: 700;
+  color: green;
+  text-align: center;
+  margin-top: 150px;
+  animation: fadeInUp 1s ease-out forwards; /* forwards ensures the animation stays in its final state */
+}

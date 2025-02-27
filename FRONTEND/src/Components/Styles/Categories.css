@@ -1,0 +1,158 @@
+.categoriesContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    width: 60%;
+    margin: 0 auto;
+    max-width: 1200px;
+  }
+  
+  .categoryBox {
+    flex: 1 1;
+    min-width: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 320px;
+    min-height: 320px;
+    position: relative;
+  }
+  
+  .firstCategoryBox {
+    flex: 2 1;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  
+  .firstCategoryBox1 {
+    flex: 2 1;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  
+  .secondCategoryBox {
+    flex: 1 1;
+    flex-direction: column;
+  }
+  
+  .secondCategoryBox1 {
+    flex: 1 1;
+    flex-direction: column;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  
+  .secondBoxChild1 {
+    margin-bottom: 10px;
+    width: 100%;
+    flex: 1;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+  }
+  
+  .secondBoxChild2 {
+    width: 100%;
+    flex: 1;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+  }
+  
+  .button_categories {
+    position: absolute;
+    top: 75%;
+    left: 27%;
+    transform: translate(-50%, -50%);
+    background-color: transparent;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border: 2px solid white;
+    transition: all 0.3s ease;
+  }
+  
+  .button_categories:hover {
+    background-color: #007f4e;
+    transform: translate(-50%, -55%);
+  }
+  
+  .button1 {
+    position: absolute;
+    top: 75%;
+    left: 27%;
+    transform: translate(-50%, -50%);
+    background-color: transparent;
+    color: white;
+    border: none;
+    padding: 10px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    border: 2px solid white;
+    transition: all 0.3s ease;
+  }
+  
+  .button1:hover {
+    background-color: #007f4e;
+    transform: translate(-50%, -55%);
+  }
+  
+  .outer_container {
+    width: 100%;
+    padding-top: 10px;
+    text-align: center;
+    margin-bottom: 10px;
+    background-color :#f2f2f2;
+  }
+
+  @media (min-width: 500px) and (max-width: 600px) {
+    .categoriesContainer {
+      width: 100%;
+      max-width: none;
+      flex-direction: column; /* Stack all items in a column */
+    }
+  
+    .categoryBox {
+      width: 100%; /* Ensure each box takes full width */
+      height: 250px; /* Adjust height as needed */
+      min-height: 250px;
+    }
+  
+    .firstCategoryBox, .firstCategoryBox1, .secondCategoryBox {
+      width: 100%; /* Ensure they are all full width */
+      height: 250px; /* Adjust height for consistency */
+    }
+  
+    .secondBoxChild1, .secondBoxChild2 {
+      width: 60%; /* Full width in column layout */
+      height: 220px; /* Adjust for stacking */
+
+    }
+  
+    .button_categories, .button1 {
+      font-size: 14px;
+      padding: 8px 16px;
+    }
+  
+    /* Hide box4 on screens between 500px and 800px */
+    #categoryBox4 {
+      display: none;
+    }
+  }
+
+  @media (min-width: 700px) and (max-width: 1100px){
+    .categoriesContainer {
+        width: 100%;
+    }
+  }
