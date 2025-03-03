@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
 const ProfileDetails = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
-
   useEffect(() => {
     const fetchProfile = async () => {
       if (!token) {
@@ -28,7 +26,7 @@ const ProfileDetails = () => {
         }
 
         const data = await response.json();
-        console.log("Fetched Data:", data); // ✅ Debugging API Response
+        console.log("Fetched Data:", data); 
         setProfile(data.user);
         setLoading(false);
       } catch (error) {

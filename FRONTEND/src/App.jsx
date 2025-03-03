@@ -59,6 +59,7 @@ import ProfileDetails from "./Components/ProfileDetails";
 import Footer from "./Components/Footer";
 import Navbar from "./Components/Navbar";
 import Bestproduct from "./Components/Bestproduct";
+import Edit from "./Components/Edit";
 
 function PrivateRoute({ element }) {
   const token = localStorage.getItem("token");
@@ -94,6 +95,8 @@ function AppContent() {
         <Route path="/products/:category" element={<PrivateRoute element={<ProductList />} />} />
         <Route path="/profile" element={<PrivateRoute element={<ProfileDetails />} />} />
         <Route path="/bestproduct" element={<PrivateRoute element={<Bestproduct />} />} />
+        <Route path="/edit" element={<PrivateRoute element={<Edit />} />} />
+
       </Routes>
 
       {/* Show Footer only if not on login/signup pages */}
