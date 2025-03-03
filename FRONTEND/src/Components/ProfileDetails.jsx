@@ -51,6 +51,7 @@ const ProfileDetails = () => {
 
       if (response.ok) {
         console.log("Profile deleted successfully");
+        localStorage.removeItem("token");
         navigate("/");
       } else {
         const errorData = await response.json();
@@ -213,17 +214,5 @@ const ProfileDetails = () => {
     </div>
   );
 };
-
-
-//   return (
-//     <div>
-//       <h1>Profile Details</h1>
-//       <p><strong>Name:</strong> {profile.fullname}</p>
-//       <p><strong>Email:</strong> {profile.email}</p>
-//       <p><strong>Phone Number:</strong> {profile.phoneNumber}</p>
-//       <p><strong>Address:</strong> {profile.address}</p>
-//     </div>
-//   );
-// };
 
 export default ProfileDetails;
