@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const ProfileDetails = () => {
-  const navigate = useNavigate();
-  const token = localStorage.getItem("token");
   const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -23,20 +23,23 @@ const ProfileDetails = () => {
           },
         });
 
-        if (response.ok) {
-          const data = await response.json();
-          setProfile(data);
-        } else {
-          console.error("Failed to fetch profile");
+        if (!response.ok) {
+          throw new Error("Failed to fetch profile");
         }
+
+        const data = await response.json();
+        console.log("Fetched Data:", data); // ✅ Debugging API Response
+        setProfile(data.user);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching profile:", error);
+        setError("Failed to fetch profile");
+        setLoading(false);
       }
     };
 
     fetchProfile();
   }, [token, navigate]);
-
   const handleDelete = async () => {
     try {
       const response = await fetch("http://localhost:3000/api/delete", {
@@ -62,6 +65,9 @@ const ProfileDetails = () => {
     return <div>Loading...</div>;
   }
 
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+  if (!profile) return <div>No profile data available</div>;
   const styles = {
     whole: {
       display: "flex",
@@ -140,17 +146,17 @@ const ProfileDetails = () => {
          
           <h2 style={styles.heading}>Profile Details</h2>
         </div>
-        <div style={styles.detailGroup}>
+        {/* <div style={styles.detailGroup}>
           <span style={styles.label}>Username</span>
           <span style={styles.value}>{profile.username}</span>
-        </div>
+        </div> */}
         <div style={styles.detailGroup}>
           <span style={styles.label}>Full Name</span>
-          <span style={styles.value}>{profile.fullName}</span>
+          <span style={styles.value}>{profile.fullname}</span>
         </div>
         <div style={styles.detailGroup}>
           <span style={styles.label}>Mobile Number</span>
-          <span style={styles.value}>{profile.mobileNumber}</span>
+          <span style={styles.value}>{profile.phoneNumber}</span>
         </div>
         <div style={styles.detailGroup}>
           <span style={styles.label}>Email ID</span>
@@ -207,5 +213,17 @@ const ProfileDetails = () => {
     </div>
   );
 };
+
+
+//   return (
+//     <div>
+//       <h1>Profile Details</h1>
+//       <p><strong>Name:</strong> {profile.fullname}</p>
+//       <p><strong>Email:</strong> {profile.email}</p>
+//       <p><strong>Phone Number:</strong> {profile.phoneNumber}</p>
+//       <p><strong>Address:</strong> {profile.address}</p>
+//     </div>
+//   );
+// };
 
 export default ProfileDetails;
