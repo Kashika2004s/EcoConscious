@@ -7,14 +7,14 @@ const router = express.Router();
 // PUT route to update user details using token info
 router.put("/", authenticateToken, async (req, res) => {
   console.log("✅ Edit route hit");
-  console.log("🔹 Extracted User ID:", req.user.id);
+  console.log("🔹 Extracted User ID:", req.user.userId);
 
   const {fullname, address, phoneNumber } = req.body;
   const userId = req.user.id; // Get user ID from token
 
   try {
     const [result] = await db.execute(
-      "UPDATE users SET fullname = ?, address = ?, phoneNumber = ? WHERE id = ?",
+      "UPDATE users SET fullname = ?, address = ?, phoneNumber = ? WHERE userId = ?",
       [fullname, address, phoneNumber, userId]
     );
 

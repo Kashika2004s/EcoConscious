@@ -7,13 +7,13 @@ const router = express.Router();
 // DELETE route to delete user details using token info
 router.delete("/", authenticateToken, async (req, res) => {
   console.log("✅ Delete route hit");
-  console.log("🔹 Extracted User ID:", req.user.id);
+  console.log("🔹 Extracted User ID:", req.user.userId);
 
   const userId = req.user.id; // Get user ID from token
 
   try {
     const [result] = await db.execute(
-      "DELETE FROM users WHERE id = ?",
+      "DELETE FROM users WHERE userId = ?",
       [userId]
     );
 

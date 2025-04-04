@@ -12,7 +12,7 @@ dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET;
 const BASE_URL = process.env.BASE_URL || "http://localhost:3000";
 
-// Nodemailer setup
+// Email transporter config
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -21,37 +21,48 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// ✅ Signup Route
+// POST /api/signup
 router.post("/", validateSignup, hashPassword, async (req, res) => {
   const { username, fullname, email, password, address, phoneNumber } = req.body;
 
   try {
-    // ✅ Check if username or email already exists
+    // FIXED: Changed 'id' to 'userId'
     const [existingUsers] = await db.execute(
-      "SELECT id, isVerified FROM users WHERE username = ? OR email = ?",
+      "SELECT userId, isVerified FROM users WHERE username = ? OR email = ?",
       [username, email]
     );
 
     if (existingUsers.length > 0) {
       if (existingUsers[0].isVerified === 0) {
-        return res.status(400).json({ message: "Email already registered but not verified. Check your inbox." });
+        return res.status(400).json({
+          message: "Email already registered but not verified. Check your inbox."
+        });
       }
       return res.status(400).json({ message: "Username or Email is already taken" });
     }
 
-    // ✅ Generate email verification token (valid for 1 hour)
+    // Create email verification token
     const verificationToken = jwt.sign({ email }, JWT_SECRET, { expiresIn: "1h" });
 
-    // ✅ Insert user into the database (use the hashed password)
+    // Insert user into database
     const insertQuery = `
       INSERT INTO users (username, fullname, email, password, address, phoneNumber, verification_token, isVerified)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
     
-    await db.execute(insertQuery, [username, fullname, email, password, address, phoneNumber, verificationToken, 0]); 
+    await db.execute(insertQuery, [
+      username,
+      fullname,
+      email,
+      password,
+      address,
+      phoneNumber,
+      verificationToken,
+      0
+    ]);
 
+    // Send verification email
     const verificationUrl = `${BASE_URL}/api/signup/verify?token=${verificationToken}`;
 
-    // ✅ Send verification email
     await transporter.sendMail({
       from: `"EcoConsious" <${process.env.EMAIL}>`,
       to: email,
@@ -77,7 +88,7 @@ router.post("/", validateSignup, hashPassword, async (req, res) => {
   }
 });
 
-// ✅ Email Verification Route
+// GET /api/signup/verify
 router.get("/verify", async (req, res) => {
   const { token } = req.query;
 
@@ -89,8 +100,10 @@ router.get("/verify", async (req, res) => {
     const decoded = jwt.verify(token, JWT_SECRET);
     const email = decoded.email;
 
-    // ✅ Update isVerified to 1 in the database
-    const [result] = await db.execute("UPDATE users SET isVerified = 1, verification_token = NULL WHERE email = ?", [email]);
+    const [result] = await db.execute(
+      "UPDATE users SET isVerified = 1, verification_token = NULL WHERE email = ?",
+      [email]
+    );
 
     if (result.affectedRows === 0) {
       return res.status(400).json({ message: "Invalid or expired token" });

@@ -56,10 +56,12 @@ import Login from "./Components/SignUp_Login";
 import Home from "./Components/Home";
 import ProductList from "./Components/ProductList";
 import ProfileDetails from "./Components/ProfileDetails";
+import ProductProfile from "./Components/ProductProfile";
 import Footer from "./Components/Footer";
 import Navbar from "./Components/Navbar";
 import Bestproduct from "./Components/Bestproduct";
 import Edit from "./Components/Edit";
+import Wishlist from "./Components/Wishlist";
 
 function PrivateRoute({ element }) {
   const token = localStorage.getItem("token");
@@ -93,6 +95,8 @@ function AppContent() {
         <Route path="/login" element={<AuthRedirect element={<Login />} />} />
         <Route path="/home" element={<PrivateRoute element={<Home />} />} />
         <Route path="/products/:category" element={<PrivateRoute element={<ProductList />} />} />
+        <Route path="/products/:category/:id" element={<PrivateRoute element={<ProductProfile />} />} />
+        <Route path="/wishlist" element={<PrivateRoute element={<Wishlist />} />} />
         <Route path="/profile" element={<PrivateRoute element={<ProfileDetails />} />} />
         <Route path="/bestproduct" element={<PrivateRoute element={<Bestproduct />} />} />
         <Route path="/edit" element={<PrivateRoute element={<Edit />} />} />

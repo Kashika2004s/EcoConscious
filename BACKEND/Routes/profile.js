@@ -10,7 +10,7 @@ router.get("/", authenticateToken, async (req, res) => {
 
   try {
     const [users] = await db.execute(
-      "SELECT fullname, email, address, phoneNumber FROM users WHERE id = ?",
+      "SELECT fullname, email, address, phoneNumber FROM users WHERE userId = ?",
       [req.user.id]
     );
 
