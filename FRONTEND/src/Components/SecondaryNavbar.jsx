@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Styles/SecondaryNavbar.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 const SecondaryNavbar = ({ currentCategory, onSortSelect, onFilterSelect }) => {
   const [showMaterialSubMenu, setShowMaterialSubMenu] = useState(false);
@@ -48,7 +48,6 @@ const SecondaryNavbar = ({ currentCategory, onSortSelect, onFilterSelect }) => {
               onMouseLeave={() => setShowMaterialSubMenu(false)}
             >
               Material Sourcing
-              
               {showMaterialSubMenu && (
                 <div className="submenu">
                   <div className="dropdown-item" onClick={() => onFilterSelect("material_sourcing_good")}>

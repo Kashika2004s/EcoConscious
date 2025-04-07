@@ -15,8 +15,8 @@ const productsRouter = require("./Routes/products");
 const bestProductRouter = require("./Routes/bestProduct");
 const profileRouter = require("./Routes/profile");
 const deleteRouter=require("./Routes/delete");
-
 const editRouter=require("./Routes/edit");
+const searchRouter = require("./Routes/search");
 
 dotenv.config();
 
@@ -47,6 +47,7 @@ db.execute("SELECT 1")
     app.use("/api/profile", authenticateToken, profileRouter);
     app.use("/api/delete",authenticateToken,deleteRouter);
     app.use("/api/edit",authenticateToken,editRouter);
+    app.use("/api/search", searchRouter); 
 
     app.use("*", (req, res) => {
       res.status(404).json({ message: "❌ Route not found" });
