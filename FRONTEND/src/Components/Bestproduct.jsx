@@ -32,8 +32,6 @@ const BestProducts = () => {
 
     fetchBestProducts();
   }, []);
-
-  // Save state to sessionStorage on changes
   useEffect(() => {
     sessionStorage.setItem("loadedProducts", JSON.stringify(loadedProducts));
     sessionStorage.setItem("currentScore", JSON.stringify(currentScore));

@@ -4,15 +4,15 @@ const authenticateToken = require("../Middlewares/tokenAuthentication");
 
 const router = express.Router();
 router.put("/", authenticateToken, async (req, res) => {
-  console.log("Edit route hit");
-  console.log("Extracted User ID:", req.user.id);
+  console.log("✅ Edit route hit");
+  console.log("🔹 Extracted User ID:", req.user.userId);
 
   const {fullname, address, phoneNumber } = req.body;
   const userId = req.user.id;
 
   try {
     const [result] = await db.execute(
-      "UPDATE users SET fullname = ?, address = ?, phoneNumber = ? WHERE id = ?",
+      "UPDATE users SET fullname = ?, address = ?, phoneNumber = ? WHERE userId = ?",
       [fullname, address, phoneNumber, userId]
     );
 

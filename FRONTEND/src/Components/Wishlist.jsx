@@ -87,17 +87,8 @@ const styles = {
   emptyMessageText: {
     fontSize: "26px",
     color: "#555",
-    fontWeight:"bold",
+    fontWeight: "bold",
     marginBottom: "20px",
-  },
-  goHomeButton: {
-    padding: "10px 20px",
-    backgroundColor: "#007bff",
-    color: "white",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-    fontSize: "16px",
   },
 };
 
@@ -152,6 +143,7 @@ const Wishlist = () => {
       alert("You need to be logged in to add items to your cart.");
       return;
     }
+
     try {
       const response = await fetch("http://localhost:3000/api/cart/add", {
         method: "POST",
@@ -160,14 +152,15 @@ const Wishlist = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          productId: item.productId,
+          productId: item.id, // ✅ Changed
           name: item.name,
           price: item.price,
           image: item.image,
           description: item.description,
-          quantity: 1, // Default quantity
+          quantity: 1,
         }),
       });
+
       const data = await response.json();
       if (response.ok) {
         alert(data.message);
@@ -206,7 +199,7 @@ const Wishlist = () => {
       } else {
         alert("Item successfully removed from wishlist");
         setWishlistItems((prevItems) =>
-          prevItems.filter((item) => item.productId !== productId)
+          prevItems.filter((item) => item.id !== productId) // ✅ Changed
         );
       }
     } catch (error) {
@@ -215,13 +208,8 @@ const Wishlist = () => {
     }
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <div style={styles.container}>
@@ -240,12 +228,12 @@ const Wishlist = () => {
           >
             <span
               style={styles.cross}
-              onClick={() => handleRemoveFromWishlist(item.productId)}
+              onClick={() => handleRemoveFromWishlist(item.id)} // ✅ Changed
             >
               &times;
             </span>
             <Link
-              to={`/products/${item.category}/${item.productId}`}
+              to={`/products/${item.category}/${item.id}`} // ✅ Changed
               style={{ textDecoration: "none", color: "inherit" }}
             >
               <img src={item.image} alt={item.name} style={styles.image} />
@@ -267,8 +255,9 @@ const Wishlist = () => {
       ) : (
         <div style={styles.emptyMessageContainer}>
           <p style={styles.emptyMessageText}>
-            Your wishlist is empty.</p><p>Explore our collection and find something amazing!
+            Your wishlist is empty.
           </p>
+          <p>Explore our collection and find something amazing!</p>
           <button
             onClick={() => navigate("/")}
             style={{
@@ -278,7 +267,7 @@ const Wishlist = () => {
               border: "none",
               cursor: "pointer",
               borderRadius: "5px",
-              fontSize:"20px",
+              fontSize: "20px",
               marginTop: "20px",
             }}
           >

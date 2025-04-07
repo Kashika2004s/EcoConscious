@@ -4,14 +4,14 @@ const authenticateToken = require("../Middlewares/tokenAuthentication");
 
 const router = express.Router();
 router.delete("/", authenticateToken, async (req, res) => {
-  console.log("Delete route hit");
-  console.log("Extracted User ID:", req.user.id);
+  console.log("✅ Delete route hit");
+  console.log("🔹 Extracted User ID:", req.user.userId);
 
   const userId = req.user.id;
 
   try {
     const [result] = await db.execute(
-      "DELETE FROM users WHERE id = ?",
+      "DELETE FROM users WHERE userId = ?",
       [userId]
     );
 

@@ -45,23 +45,27 @@ const ProductProfile = () => {
     };
     const checkWishlist = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/wishlist", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
-        const data = await response.json();
-        if (response.ok) {
-          const inWishlist = data.some((item) => item.productId === id);
-          setIsInWishlist(inWishlist);
-        } else {
-          console.error("Error checking wishlist status");
-        }
+          const response = await fetch("http://localhost:3000/api/wishlist", {
+              headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                  "Content-Type": "application/json",
+              },
+          });
+          const data = await response.json();
+          
+          if (response.ok) {
+              // ✅ Check against `id`, not `productId`
+              const inWishlist = data.some((item) => item.id === productId);
+              console.log("🛍️ Wishlist contains product:", inWishlist);
+              setIsInWishlist(inWishlist);
+          } else {
+              console.error("Error checking wishlist status");
+          }
       } catch (error) {
-        console.error("Error checking wishlist:", error);
+          console.error("Error checking wishlist:", error);
       }
-    };
+  };
+  
 
     if (token) {
       fetchProduct();
@@ -78,42 +82,48 @@ const ProductProfile = () => {
   };
 
   const addToWishlist = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("You need to be logged in to add items to your wishlist.");
-      return;
+    if (!product) {
+        console.error("❌ Error: Product data is missing");
+        return;
     }
-    if (isInWishlist) {
-      alert("This item is already in your wishlist.");
-      return;
-    }
+
+    const productData = {
+        id: product.id, 
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        description: product.description,
+    };
+
+    console.log("🛒 Sending wishlist data:", productData);
+
     try {
-      const response = await fetch("http://localhost:3000/api/wishlist/add", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          productId: product._id,
-          name: product.name,
-          price: product.price,
-          image: product.image,
-          description: product.description,
-        }),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        setIsInWishlist(true);
-        alert(data.message);
-        navigate("/wishlist");
-      } else {
-        alert(data.message || "Error adding to wishlist");
-      }
+        const response = await fetch("http://localhost:3000/api/wishlist/add", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`, 
+            },
+            body: JSON.stringify(productData),
+        });
+
+        const result = await response.json();
+        console.log("✅ Wishlist API Response:", result);
+
+        if (response.ok) {
+            setIsInWishlist(true); // ✅ Set wishlist state immediately
+            alert(result.message);
+            navigate("/wishlist");
+        } else {
+            throw new Error(result.message || "Failed to add to wishlist");
+        }
     } catch (error) {
-      console.error("Error adding to wishlist:", error);
+        console.error("❌ Error in wishlist request:", error.message);
     }
-  };
+};
+
+
+
 
   const buyNow = async () => {
     const token = localStorage.getItem("token");
@@ -156,6 +166,17 @@ const ProductProfile = () => {
       alert("You need to be logged in to add items to your cart.");
       return;
     }
+  
+    if (!product?.id) {
+      alert("Invalid product");
+      return;
+    }
+  
+    if (quantity < 1 || quantity > 20) {
+      alert("Quantity must be between 1 and 20.");
+      return;
+    }
+  
     try {
       const response = await fetch("http://localhost:3000/api/cart/add", {
         method: "POST",
@@ -164,7 +185,7 @@ const ProductProfile = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          productId: product._id,
+          productId: product.id,
           name: product.name,
           price: product.price,
           image: product.image,
@@ -172,6 +193,7 @@ const ProductProfile = () => {
           quantity,
         }),
       });
+  
       const data = await response.json();
       if (response.ok) {
         alert(data.message);
@@ -181,8 +203,10 @@ const ProductProfile = () => {
       }
     } catch (error) {
       console.error("Error adding to cart:", error);
+      alert("Something went wrong. Please try again.");
     }
   };
+  
 
   if (loading) {
     return <div>Loading...</div>;
