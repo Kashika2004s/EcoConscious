@@ -166,6 +166,17 @@ const ProductProfile = () => {
       alert("You need to be logged in to add items to your cart.");
       return;
     }
+  
+    if (!product?.id) {
+      alert("Invalid product");
+      return;
+    }
+  
+    if (quantity < 1 || quantity > 20) {
+      alert("Quantity must be between 1 and 20.");
+      return;
+    }
+  
     try {
       const response = await fetch("http://localhost:3000/api/cart/add", {
         method: "POST",
@@ -174,7 +185,7 @@ const ProductProfile = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          productId: product._id,
+          productId: product.id,
           name: product.name,
           price: product.price,
           image: product.image,
@@ -182,6 +193,7 @@ const ProductProfile = () => {
           quantity,
         }),
       });
+  
       const data = await response.json();
       if (response.ok) {
         alert(data.message);
@@ -191,8 +203,10 @@ const ProductProfile = () => {
       }
     } catch (error) {
       console.error("Error adding to cart:", error);
+      alert("Something went wrong. Please try again.");
     }
   };
+  
 
   if (loading) {
     return <div>Loading...</div>;
