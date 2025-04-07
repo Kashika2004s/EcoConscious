@@ -47,16 +47,16 @@ const ProductProfile = () => {
       try {
           const response = await fetch("http://localhost:3000/api/wishlist", {
               headers: {
-                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                  Authorization:` Bearer ${localStorage.getItem("token")}`,
                   "Content-Type": "application/json",
               },
           });
           const data = await response.json();
           
           if (response.ok) {
-              // ✅ Check against `id`, not `productId`
+              // ✅ Check against id, not productId
               const inWishlist = data.some((item) => item.id === productId);
-              console.log("🛍️ Wishlist contains product:", inWishlist);
+              console.log("🛍 Wishlist contains product:", inWishlist);
               setIsInWishlist(inWishlist);
           } else {
               console.error("Error checking wishlist status");

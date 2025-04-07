@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../db"); // Ensure this points to your MySQL connection
-
-// ✅ Fetch all products
+const db = require("../db");
 router.get("/", async (req, res) => {
   try {
     console.log("Fetching all products...");
@@ -14,10 +12,10 @@ router.get("/", async (req, res) => {
       return res.status(404).json({ message: "No products available" });
     }
 
-    console.log("✅ Products fetched successfully");
+    console.log("Products fetched successfully");
     res.status(200).json(products);
   } catch (error) {
-    console.error("❌ Error fetching products:", error);
+    console.error("Error fetching products:", error);
     res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 });
@@ -32,11 +30,11 @@ router.get("/category/:category", async (req, res) => {
     const [products] = await db.execute("SELECT * FROM products WHERE category = ?", [category]);
 
     if (products.length === 0) {
-      console.log(`❌ No products found in category: ${category}`);
+      console.log(`No products found in category: ${category}`);
       return res.status(404).json({ message: "No products in this category" });
     }
 
-    console.log(`✅ Products fetched for category: ${category}`);
+    console.log(`Products fetched for category: ${category}`);
     res.status(200).json(products);
   } catch (error) {
     console.error(`❌ Error fetching category ${category}:`, error);
@@ -65,5 +63,4 @@ router.get("/:id", async (req, res) => {
     res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 });
-
 module.exports = router;
