@@ -16,16 +16,22 @@ const Alternative = ({ productId, category }) => {
         setLoading(true);
         const token = localStorage.getItem("token");
 
-        const response = await axios.get(
-          `http://localhost:3000/api/alternatives/${category}/${productId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        // Replacing axios with MySQL-based fetching here
+        const response = await axios.get(`${API_BASE_URL}/api/alternatives/${category}/${productId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-        setAlternatives(response.data);
+        console.log("Alternatives:", response.data); // Ye line add kar ke check kar
+if (response.data.length > 0) {
+  setAlternatives(response.data);
+} else {
+  setError("No alternatives found.");
+}
+
+
+        setAlternatives(response.data); // set the response data (alternatives) to state
       } catch (error) {
         setError(
           error.response
@@ -38,13 +44,14 @@ const Alternative = ({ productId, category }) => {
     };
 
     if (productId && category) {
-      fetchAlternatives();
+      fetchAlternatives(); // Trigger fetching of alternatives
     }
   }, [category, productId]);
 
   const toggleDrawer = () => {
     setShowDrawer(!showDrawer);
   };
+
   const closeDrawer = () => {
     setShowDrawer(false);
   };
@@ -104,6 +111,7 @@ const Alternative = ({ productId, category }) => {
     </div>
   );
 };
+
 const LoadingButton = ({ ecoScore }) => {
   const [currentScore, setCurrentScore] = useState(0);
   useEffect(() => {
@@ -174,6 +182,7 @@ const LoadingButton = ({ ecoScore }) => {
     </div>
   );
 };
+
 const styles = {
   logoButton: {
     backgroundColor: "transparent",
@@ -195,11 +204,11 @@ const styles = {
   drawer: {
     position: "fixed",
     top: 0,
-    right: "-500px", 
+    right: "-500px",
     width: "400px",
     height: "100%",
     backgroundColor: "#e7f5e1",
-    boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.1)", 
+    boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.1)",
     padding: "20px",
     transition: "right 0.6s ease-in-out",
     zIndex: 1000,

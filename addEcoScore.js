@@ -6,8 +6,8 @@ dotenv.config(); // Load environment variables from a .env file
 // Database connection setup
 const db = mysql.createConnection({
   host: process.env.DB_HOST || "localhost",
-  user: process.env.DB_USER || "root",
-  password: process.env.DB_PASS || "Kashika4680@",
+  user: process.env.DB_USER || "jashanjitkaur007",
+  password: process.env.DB_PASS || "123456",
   database: process.env.DB_NAME || "ecommerce",
 });
 
