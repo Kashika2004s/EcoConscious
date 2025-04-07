@@ -1,34 +1,31 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../db"); // ✅ Ensure correct db import
+const db = require("../db");
 const authenticate = require("../Middlewares/authmiddleware");
 
-// ✅ Route to get wishlist items
+// ✅ Get wishlist items
 router.get("/", authenticate, async (req, res) => {
     const userId = req.user.userId;
-
     try {
-        // ❌ db.promise().query(...) ka use mat karo
         const [wishlistItems] = await db.query(
-            `SELECT id, name, price, image, description FROM wishlist WHERE userId = ?`,
+            `SELECT productId AS id, name, price, image, description FROM wishlist WHERE userId = ?`,
             [userId]
         );
 
         res.status(200).json(wishlistItems);
     } catch (error) {
-        console.error("Error fetching wishlist:", error);
+        console.error("❌ Error fetching wishlist:", error.message);
         res.status(500).json({ message: "Internal Server Error" });
     }
 });
 
-// ✅ Route to add to wishlist
+// ✅ Add to wishlist
 router.post("/add", authenticate, async (req, res) => {
-    console.log("✅ Incoming request body:", req.body); // 🔍 Check what frontend is sending
+    console.log("✅ Incoming request body:", req.body);
 
     const { id: productId, name, price, image, description } = req.body;
     const userId = req.user.userId;
 
-    // ✅ Check if required fields are missing
     if (!productId || !name || !price || !image || !description) {
         console.log("❌ Missing required fields:", req.body);
         return res.status(400).json({ message: "Missing required fields" });
@@ -36,7 +33,7 @@ router.post("/add", authenticate, async (req, res) => {
 
     try {
         const [existing] = await db.query(
-            "SELECT * FROM wishlist WHERE userId = ? AND id = ?",
+            "SELECT * FROM wishlist WHERE userId = ? AND productId = ?",
             [userId, productId]
         );
 
@@ -45,7 +42,7 @@ router.post("/add", authenticate, async (req, res) => {
         }
 
         await db.query(
-            "INSERT INTO wishlist (userId, id, name, price, image, description) VALUES (?, ?, ?, ?, ?, ?)",
+            "INSERT INTO wishlist (userId, productId, name, price, image, description) VALUES (?, ?, ?, ?, ?, ?)",
             [userId, productId, name, price, image, description]
         );
 
@@ -56,21 +53,20 @@ router.post("/add", authenticate, async (req, res) => {
     }
 });
 
-
-// ✅ Route to remove from wishlist
+// ✅ Remove from wishlist
 router.delete("/remove/:id", authenticate, async (req, res) => {
     const userId = req.user.userId;
     const productId = req.params.id;
 
     try {
         await db.query(
-            "DELETE FROM wishlist WHERE userId = ? AND id = ?",
+            "DELETE FROM wishlist WHERE userId = ? AND productId = ?",
             [userId, productId]
         );
 
         res.status(200).json({ message: "Item removed from wishlist" });
     } catch (error) {
-        console.error("Error removing from wishlist:", error);
+        console.error("❌ Error removing from wishlist:", error.message);
         res.status(500).json({ message: "Internal Server Error" });
     }
 });
