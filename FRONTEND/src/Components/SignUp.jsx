@@ -8,42 +8,46 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const username = e.target.username.value;
-    const fullname = e.target.full_name.value; // Changed from full_name to fullname
+    const first_name = e.target.first_name.value;
+    const last_name = e.target.last_name.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
-    const confirmPassword = e.target.confirm_password.value; // Changed from confirm_password to confirmPassword
-    const address = e.target.address.value;
-    const phoneNumber = e.target.phone_number.value; // Changed from phone_number to phoneNumber
-  
+    const confirmPassword = e.target.confirm_password.value;
+    const phoneNumber = e.target.phoneNumber.value;
+    const street = e.target.street.value;
+    const city = e.target.city.value;
+    const state_zip = e.target.state_zip.value;
+
     if (password !== confirmPassword) {
       setError("Passwords do not match!");
       return;
     }
-  
+
     try {
       const response = await fetch("http://localhost:3000/api/signup", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           username,
-          fullname, // Updated key
+          first_name,
+          last_name,
           email,
           password,
-          confirmPassword, // Updated key
-          address,
-          phoneNumber, // Updated key
+          confirmPassword,
+          phoneNumber,
+          street,
+          city,
+          state_zip,
         }),
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(JSON.stringify(errorData));
       }
-  
+
       const data = await response.json();
       console.log("Signup successful:", data);
       setIsSignedUp(true);
@@ -52,9 +56,6 @@ const SignUp = () => {
       setError(error.message);
     }
   };
-  
-  
-
 
   const styles = {
     mainbox: {
@@ -72,12 +73,6 @@ const SignUp = () => {
       width: "100%",
       maxWidth: "600px",
       backgroundColor: "#ffffff",
-    },
-    inputGroupContainer: {
-      display: "flex",
-      flexWrap: "wrap",
-      gap: "20px",
-      marginBottom: "20px",
     },
     halfWidthInputGroupContainer: {
       display: "flex",
@@ -105,7 +100,6 @@ const SignUp = () => {
       width: "100%",
       padding: "10px 0",
       fontSize: "16px",
-      borderRadius: "0",
       border: "none",
       backgroundColor: "transparent",
       color: "#333",
@@ -120,7 +114,6 @@ const SignUp = () => {
       width: "100%",
       maxWidth: "200px",
       marginTop: "10px",
-      transition: "background-color 0.3s ease, transform 0.3s ease",
     },
     heading: {
       fontSize: "24px",
@@ -134,7 +127,6 @@ const SignUp = () => {
       backgroundColor: "#e7f9e7",
       padding: "20px",
       border: "1px solid #7ac88e",
-      borderRadius: "8px",
       color: "#4caf50",
       marginBottom: "20px",
     },
@@ -160,8 +152,8 @@ const SignUp = () => {
         {isSignedUp ? (
           <div style={styles.successBox}>
             <p>
-              A confirmation email has been sent to you. Please verify your email
-              address to complete the signup process.
+              A confirmation email has been sent. Please verify your email to
+              complete signup.
             </p>
             <button
               style={styles.successButton}
@@ -171,99 +163,72 @@ const SignUp = () => {
             </button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit}>
-            <div style={styles.halfWidthInputGroupContainer}>
-              <div style={styles.halfWidthInputGroup}>
-                <label htmlFor="username" style={styles.label}>
-                  USERNAME
-                </label>
-                <input
-                  type="text"
-                  id="username"
-                  name="username"
-                  required
-                  style={styles.input}
-                />
-              </div>
-              <div style={styles.halfWidthInputGroup}>
-                <label htmlFor="full_name" style={styles.label}>
-                  FULL NAME
-                </label>
-                <input
-                  type="text"
-                  id="full_name"
-                  name="full_name"
-                  required
-                  style={styles.input}
-                />
-              </div>
-            </div>
-            <div style={styles.fullWidthInputGroup}>
-              <label htmlFor="email" style={styles.label}>
-                EMAIL
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                required
-                style={styles.input}
-              />
-            </div>
-            <div style={styles.halfWidthInputGroupContainer}>
-              <div style={styles.halfWidthInputGroup}>
-                <label htmlFor="password" style={styles.label}>
-                  PASSWORD
-                </label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  required
-                  style={styles.input}
-                />
-              </div>
-              <div style={styles.halfWidthInputGroup}>
-                <label htmlFor="confirm_password" style={styles.label}>
-                  CONFIRM PASSWORD
-                </label>
-                <input
-                  type="password"
-                  id="confirm_password"
-                  name="confirm_password"
-                  required
-                  style={styles.input}
-                />
-              </div>
-            </div>
-            <div style={styles.fullWidthInputGroup}>
-              <label htmlFor="address" style={styles.label}>
-                ADDRESS
-              </label>
-              <input
-                type="text"
-                id="address"
-                name="address"
-                required
-                style={styles.input}
-              />
-            </div>
-            <div style={styles.fullWidthInputGroup}>
-              <label htmlFor="phone_number" style={styles.label}>
-                PHONE NUMBER
-              </label>
-              <input
-                type="tel"
-                id="phone_number"
-                name="phone_number"
-                required
-                style={styles.input}
-              />
-            </div>
-            <button type="submit" style={styles.button}>
-              SIGN UP
-            </button>
-          </form>
+<form onSubmit={handleSubmit}>
+  {/* First Name & Last Name side by side */}
+  <div style={{ ...styles.halfWidthInputGroupContainer, marginBottom: "7px" }}>
+    <div style={styles.halfWidthInputGroup}>
+      <label htmlFor="first_name" style={styles.label}>FIRST NAME</label>
+      <input type="text" id="first_name" name="first_name" required style={styles.input} />
+    </div>
+    <div style={styles.halfWidthInputGroup}>
+      <label htmlFor="last_name" style={styles.label}>LAST NAME</label>
+      <input type="text" id="last_name" name="last_name" required style={styles.input} />
+    </div>
+  </div>
+
+  {/* Username - Full width */}
+  <div style={{ ...styles.fullWidthInputGroup, marginBottom: "7px" }}>
+    <label htmlFor="username" style={styles.label}>USERNAME</label>
+    <input type="text" id="username" name="username" required style={styles.input} />
+  </div>
+
+  {/* Email */}
+  <div style={{ ...styles.fullWidthInputGroup, marginBottom: "7px" }}>
+    <label htmlFor="email" style={styles.label}>EMAIL</label>
+    <input type="email" id="email" name="email" required style={styles.input} />
+  </div>
+
+  {/* Passwords side by side */}
+  <div style={{ ...styles.halfWidthInputGroupContainer, marginBottom: "7px" }}>
+    <div style={styles.halfWidthInputGroup}>
+      <label htmlFor="password" style={styles.label}>PASSWORD</label>
+      <input type="password" id="password" name="password" required style={styles.input} />
+    </div>
+    <div style={styles.halfWidthInputGroup}>
+      <label htmlFor="confirm_password" style={styles.label}>CONFIRM PASSWORD</label>
+      <input type="password" id="confirm_password" name="confirm_password" required style={styles.input} />
+    </div>
+  </div>
+
+  {/* Phone Number */}
+  <div style={{ ...styles.fullWidthInputGroup, marginBottom: "7px" }}>
+    <label htmlFor="phoneNumber" style={styles.label}>PHONE NUMBER</label>
+    <input type="tel" id="phoneNumber" name="phoneNumber" required style={styles.input} />
+  </div>
+
+  {/* Street */}
+  <div style={{ ...styles.fullWidthInputGroup, marginBottom: "7px" }}>
+    <label htmlFor="street" style={styles.label}>STREET</label>
+    <input type="text" id="street" name="street" required style={styles.input} />
+  </div>
+
+  {/* City & State-Zip side by side */}
+  <div style={{ ...styles.halfWidthInputGroupContainer, marginBottom: "7px" }}>
+    <div style={styles.halfWidthInputGroup}>
+      <label htmlFor="city" style={styles.label}>CITY</label>
+      <input type="text" id="city" name="city" required style={styles.input} />
+    </div>
+    <div style={styles.halfWidthInputGroup}>
+      <label htmlFor="state_zip" style={styles.label}>STATE & ZIP</label>
+      <input type="text" id="state_zip" name="state_zip" required style={styles.input} />
+    </div>
+  </div>
+
+  <button type="submit" style={styles.button}>
+    SIGN UP
+  </button>
+</form>
+
         )}
       </div>
     </div>

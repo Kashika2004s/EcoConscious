@@ -23,12 +23,21 @@ const transporter = nodemailer.createTransport({
 
 // POST /api/signup
 router.post("/", validateSignup, hashPassword, async (req, res) => {
-  const { username, fullname, email, password, address, phoneNumber } = req.body;
+  const {
+    username,
+    first_name,
+    last_name,
+    email,
+    password,
+    phoneNumber,
+    street,
+    city,
+    state_zip
+  } = req.body;
 
   try {
-    // FIXED: Changed 'id' to 'userId'
     const [existingUsers] = await db.execute(
-      "SELECT userId, isVerified FROM users WHERE username = ? OR email = ?",
+      "SELECT userid, isVerified FROM users WHERE username = ? OR email = ?",
       [username, email]
     );
 
@@ -41,41 +50,41 @@ router.post("/", validateSignup, hashPassword, async (req, res) => {
       return res.status(400).json({ message: "Username or Email is already taken" });
     }
 
-    // Create email verification token
     const verificationToken = jwt.sign({ email }, JWT_SECRET, { expiresIn: "1h" });
 
-    // Insert user into database
     const insertQuery = `
-      INSERT INTO users (username, fullname, email, password, address, phoneNumber, verification_token, isVerified)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-    
+      INSERT INTO users (username, first_name, last_name, email, password, phoneNumber, street, city, state_zip, verification_token, isVerified)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
     await db.execute(insertQuery, [
       username,
-      fullname,
+      first_name,
+      last_name,
       email,
       password,
-      address,
       phoneNumber,
+      street,
+      city,
+      state_zip,
       verificationToken,
       0
     ]);
 
-    // Send verification email
     const verificationUrl = `${BASE_URL}/api/signup/verify?token=${verificationToken}`;
 
     await transporter.sendMail({
-      from: `"EcoConsious" <${process.env.EMAIL}>`,
+      from: `"EcoConscious" <${process.env.EMAIL}>`,
       to: email,
       subject: "Verify your email",
       html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.6;">
-          <h3>Hi ${fullname},</h3>
-          <p>Welcome to <strong>EcoConsious</strong>! 🎉</p>
+          <h3>Hi ${first_name},</h3>
+          <p>Welcome to <strong>EcoConscious</strong>! 🎉</p>
           <p>To start using your account, please verify your email by clicking the button below:</p>
           <p><a href="${verificationUrl}" style="background-color: #28a745; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; display: inline-block;">Verify Email</a></p>
           <p>If you did not sign up, you can ignore this email.</p>
           <p>Best,</p>
-          <p>The EcoConsious Team</p>
+          <p>The EcoConscious Team</p>
         </div>
       `,
     });

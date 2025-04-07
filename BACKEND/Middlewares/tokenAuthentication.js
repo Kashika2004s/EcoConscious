@@ -19,9 +19,9 @@ const authenticateToken = (req, res, next) => {
       return res.status(403).json({ message: "Forbidden: Invalid token" });
     }
 
-    console.log("Token Verified! Extracted user payload:", user);
-    
-    req.user = user; // Or { userId: user._id } based on what you signed
+    console.log("✅ Token Verified! Extracted user:", user);
+
+    req.user = { userId: user.userId, email: user.email }; // ✅ this matches your token payload
     next();
   });
 };
