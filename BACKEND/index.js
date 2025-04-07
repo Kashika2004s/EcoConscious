@@ -15,6 +15,7 @@ const productsRouter = require("./Routes/products");
 const bestProductRouter = require("./Routes/bestProduct");
 const profileRouter = require("./Routes/profile");
 const wishlistRouter=require("./Routes/wishlist");
+const cartRouter=require("./Routes/cart");
 const deleteRouter=require("./Routes/delete");
 
 const editRouter=require("./Routes/edit");
@@ -50,6 +51,7 @@ db.execute("SELECT 1")
     app.use("/api/profile", authenticateToken, profileRouter);
     app.use("/api/delete",authenticateToken,deleteRouter);
     app.use("/api/wishlist", authenticateToken, wishlistRouter);
+    app.use("/api/cart", authenticateToken, cartRouter);
     app.use("/api/edit",authenticateToken,editRouter);
     app.use("/api/alternative", alternativeRouter);
     app.use("/api/cart", authenticateToken, cartRouter);

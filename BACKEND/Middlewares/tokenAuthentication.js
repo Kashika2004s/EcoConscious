@@ -17,13 +17,13 @@ const authenticateToken = (req, res, next) => {
       console.log("Token verification failed:", err.message);
       return res.status(403).json({ message: "Forbidden: Invalid token" });
     }
-
+  
     console.log("Token Verified! Extracted user:", user);
     
-    // ⬇️ Update this line based on the payload structure
-    req.user = { id: user.userId }; // or user.id if you already sign with `id`
+    // ✅ Ensure this matches how you created the token
+    req.user = { userId: user.id };
     next();
   });
-};
+};  
 
 module.exports = authenticateToken;

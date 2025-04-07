@@ -149,7 +149,6 @@ const ProductProfile = () => {
       alert("You need to be logged in to add items to your cart.");
       return;
     }
-
     try {
       const response = await fetch("http://localhost:3000/api/cart/add", {
         method: "POST",
@@ -166,7 +165,7 @@ const ProductProfile = () => {
           quantity,
         }),
       });
-
+  
       const data = await response.json();
       // if (response.ok) {
       //   alert(data.message);
@@ -185,8 +184,10 @@ const ProductProfile = () => {
   
     } catch (error) {
       console.error("Error adding to cart:", error);
+      alert("Something went wrong. Please try again.");
     }
   };
+  
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
