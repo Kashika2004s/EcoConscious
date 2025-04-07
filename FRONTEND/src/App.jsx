@@ -48,7 +48,8 @@ function AppContent() {
   return (
     <>
       {/* Show Navbar only if not on login/signup pages */}
-      {location.pathname !== "/" && location.pathname !== "/signup" && <Navbar />}
+      {!["/", "/signup", "/login"].includes(location.pathname) && <Navbar />}
+
 
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
@@ -66,7 +67,8 @@ function AppContent() {
       </Routes>
 
       {/* Show Footer only if not on login/signup pages */}
-      {location.pathname !== "/" && location.pathname !== "/signup" && <Footer />}
+      {!["/", "/signup", "/login"].includes(location.pathname) && <Footer />}
+
     </>
   );
 }
