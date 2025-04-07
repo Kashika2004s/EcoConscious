@@ -3,11 +3,12 @@ const db = require("../db");
 const authenticateToken = require("../Middlewares/tokenAuthentication");
 
 const router = express.Router();
+
 router.delete("/", authenticateToken, async (req, res) => {
   console.log("✅ Delete route hit");
   console.log("🔹 Extracted User ID:", req.user.userId);
 
-  const userId = req.user.id;
+  const userId = req.user.userId; // ✅ FIXED
 
   try {
     const [result] = await db.execute(
