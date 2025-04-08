@@ -22,12 +22,15 @@ const ProductProfile = () => {
 
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/products/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await fetch(
+          `http://localhost:3000/api/products/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
         const data = await response.json();
         if (response.ok) {
           setProduct(data);
@@ -40,24 +43,29 @@ const ProductProfile = () => {
         setLoading(false);
       }
     };
-
     const checkWishlist = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/wishlist", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
-        const data = await response.json();
-        if (response.ok) {
-          const inWishlist = data.some((item) => item.productId === productId);
-          setIsInWishlist(inWishlist);
-        }
+          const response = await fetch("http://localhost:3000/api/wishlist", {
+              headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                  "Content-Type": "application/json",
+              },
+          });
+          const data = await response.json();
+          
+          if (response.ok) {
+              // ✅ Check against id, not productId
+              const inWishlist = data.some((item) => item.id === productId);
+              console.log("🛍 Wishlist contains product:", inWishlist);
+              setIsInWishlist(inWishlist);
+          } else {
+              console.error("Error checking wishlist status");
+          }
       } catch (error) {
-        console.error("Error checking wishlist:", error);
+          console.error("Error checking wishlist:", error);
       }
-    };
+  };
+  
 
     if (token) {
       fetchProduct();
@@ -74,39 +82,48 @@ const ProductProfile = () => {
   };
 
   const addToWishlist = async () => {
-    if (!product) return;
-    const productData = {
+    if (!product) {
+        console.error("❌ Error: Product data is missing");
+        return;
+    }
 
-      // HERE - 
-      productId: product.id,
-      name: product.name,
-      price: product.price,
-      image: product.image,
-      description: product.description,
+    const productData = {
+        id: product.id, 
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        description: product.description,
     };
 
-    try {
-      const response = await fetch("http://localhost:3000/api/wishlist/add", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify(productData),
-      });
+    console.log("🛒 Sending wishlist data:", productData);
 
-      const result = await response.json();
-      if (response.ok) {
-        setIsInWishlist(true);
-        alert(result.message);
-        navigate("/wishlist");
-      } else {
-        throw new Error(result.message || "Failed to add to wishlist");
-      }
+    try {
+        const response = await fetch("http://localhost:3000/api/wishlist/add", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`, 
+            },
+            body: JSON.stringify(productData),
+        });
+
+        const result = await response.json();
+        console.log("✅ Wishlist API Response:", result);
+
+        if (response.ok) {
+            setIsInWishlist(true); // ✅ Set wishlist state immediately
+            alert(result.message);
+            navigate("/wishlist");
+        } else {
+            throw new Error(result.message || "Failed to add to wishlist");
+        }
     } catch (error) {
-      console.error("Error in wishlist request:", error.message);
+        console.error("❌ Error in wishlist request:", error.message);
     }
-  };
+};
+
+
+
 
   const buyNow = async () => {
     const token = localStorage.getItem("token");
@@ -123,7 +140,7 @@ const ProductProfile = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          productId: product.id,
+          productId: product._id,
           quantity,
           price: product.price,
           image: product.image,
@@ -133,7 +150,7 @@ const ProductProfile = () => {
       const data = await response.json();
       if (response.ok) {
         alert(data.message);
-        navigate(`/order/${data.order.id}`);
+        navigate(`/order/${data.order._id}`);
       } else {
         alert(data.message || "Error placing order");
       }
@@ -149,6 +166,17 @@ const ProductProfile = () => {
       alert("You need to be logged in to add items to your cart.");
       return;
     }
+  
+    if (!product?.id) {
+      alert("Invalid product");
+      return;
+    }
+  
+    if (quantity < 1 || quantity > 20) {
+      alert("Quantity must be between 1 and 20.");
+      return;
+    }
+  
     try {
       const response = await fetch("http://localhost:3000/api/cart/add", {
         method: "POST",
@@ -167,21 +195,12 @@ const ProductProfile = () => {
       });
   
       const data = await response.json();
-      // if (response.ok) {
-      //   alert(data.message);
-      //   navigate("/cart");
-      // } else {
-      //   alert(data.message || "Error adding to cart");
-      // }
-
       if (response.ok) {
-        setIsInCart(true); // ✅ Update icon state here
         alert(data.message);
         navigate("/cart");
       } else {
         alert(data.message || "Error adding to cart");
       }
-  
     } catch (error) {
       console.error("Error adding to cart:", error);
       alert("Something went wrong. Please try again.");
@@ -189,69 +208,204 @@ const ProductProfile = () => {
   };
   
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <>
-      <div style={{ display: "flex", padding: "50px 10px", gap: "20px", height: "95vh" }}>
-        {/* Image Section */}
-        <div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <div
+        style={{
+          display: "flex",
+          padding: "50px 10px",
+          maxWidth: "100%",
+          margin: "0 auto",
+          gap: "20px",
+          alignItems: "stretch", // Ensures both inner divs have the same height
+          height: "95vh", // Ensures the main div height fills the available space
+        }}
+      >
+        {/* Image Div */}
+        <div
+          style={{
+            flex: 1, // Ensures the image div gets equal height
+            minWidth: "280px",
+            marginTop: "10px",
+            display: "flex",
+            justifyContent: "center", // Center the image inside the div
+            alignItems: "center", // Center the image vertically
+          }}
+        >
           <img
             src={product.image || "https://via.placeholder.com/600"}
-            alt={product.name}
+            alt={product.name || "Product"}
             style={{
               width: "90%",
               height: "80vh",
               padding: "20px",
               objectFit: "contain",
-              borderLeft: "2px solid #d3d3d3",
-              borderRight: "2px solid #d3d3d3",
+              borderLeft: "2px solid #d3d3d3", // Light grey left outline
+              borderRight: "2px solid #d3d3d3", // Light grey right outline
             }}
           />
         </div>
+        {/* Product Details Div */}
+        <div
+          style={{
+            flex: 1, // Ensures the product details div gets equal height
+            padding: "20px 0px 40px 30px",
+            minWidth: "500px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between", // Ensures content is evenly spaced within the div
+          }}
+        >
+          <h1 styles={{ margin: "0", padding: "0" }}>{product.name}</h1>
+          <p
+            style={{
+              fontSize: "28px",
+              color: "#e63946",
+              margin: "0",
+              padding: "0",
+            }}
+          >
+            Price: ${product.price}
+          </p>
 
-        {/* Product Details Section */}
-        <div style={{ flex: 1, padding: "20px 0px 40px 30px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-          <h1>{product.name}</h1>
-          <p style={{ fontSize: "28px", color: "#e63946" }}>Price: ${product.price}</p>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <span style={{ color: "#ffcc00", marginRight: "15px", fontSize: "20px" }}>★★★★★</span>
-            <a href="#reviews" style={{ color: "#333", fontSize: "18px" }}>3 reviews</a>
+          {/* Ratings Section */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              margin: "0",
+              padding: "0",
+            }}
+          >
+            <span
+              style={{
+                color: "#ffcc00",
+                marginRight: "15px",
+                fontSize: "20px",
+              }}
+            >
+              ★★★★★
+            </span>
+            <a href="#reviews" style={{ color: "#333", fontSize: "18px" }}>
+              3 reviews
+            </a>
           </div>
-          <p style={{ color: "#555", fontSize: "18px" }}>{product.description}</p>
-          <p><strong>Availability:</strong> {product.inStock ? "In stock" : "Out of stock"}</p>
-          <p><strong>Product Type:</strong> {product.category}</p>
 
-          <div style={{ display: "flex", alignItems: "center" }}>
+          {/* Product Description */}
+          <p
+            style={{
+              margin: "0",
+              padding: "0",
+              color: "#555",
+              lineHeight: "1.8",
+              fontSize: "18px",
+            }}
+          >
+            {product.description}
+          </p>
+
+          {/* Availability and Product Type */}
+          <p style={{ margin: "0", padding: "0", fontSize: "18px" }}>
+            <strong>Availability:</strong>{" "}
+            {product.inStock ? "In stock" : "Out of stock"}
+          </p>
+          <p style={{ margin: "0", padding: "0", fontSize: "18px" }}>
+            <strong>Product Type:</strong> {product.category}
+          </p>
+
+          {/* Quantity and Action Buttons */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
             <input
               type="number"
               min="1"
               max="20"
               value={quantity}
               onChange={handleQuantityChange}
-              style={{ width: "70px", padding: "10px", marginRight: "15px", fontSize: "18px" }}
+              style={{
+                width: "70px",
+                padding: "10px",
+                marginRight: "15px",
+                fontSize: "18px",
+              }}
             />
-            <button onClick={addToCart} style={{ padding: "10px 20px", border: "1px solid #000", backgroundColor: "#fff", color: "#000", marginRight: "15px", width: "200px" }}>
+            <button
+              style={{
+                padding: "10px 20px",
+                border: "1px solid #000",
+                cursor: "pointer",
+                backgroundColor: "#fff",
+                color: "#000",
+                marginRight: "15px",
+                display: "flex",
+                alignItems: "center",
+                fontSize: "15px",
+                width: "200px",
+              }}
+              onClick={addToCart}
+              onMouseEnter={() => setHoveredIcon("cart")}
+              onMouseLeave={() => setHoveredIcon(null)}
+            >
               <i
-                className={hoveredIcon === "cart" ? "fas fa-cart-plus" : "fas fa-shopping-cart"}
+                className={
+                  hoveredIcon === "cart"
+                    ? "fas fa-cart-plus"
+                    : "fas fa-shopping-cart"
+                }
                 style={{
-                  marginRight: "20px",
+                  margin: "0px 20px 0px 0px",
                   fontSize: "24px",
-                  color: isInCart ? "#088F8F" : hoveredIcon === "cart" ? "#088F8F" : "#ccc",
+                  cursor: "pointer",
+                  color: isInCart
+                    ? "#088F8F"
+                    : hoveredIcon === "cart"
+                    ? "#088F8F"
+                    : "#ccc",
                   transition: "color 0.3s ease",
                 }}
               ></i>
               ADD TO CART
             </button>
 
-            <button onClick={addToWishlist} style={{ padding: "10px 20px", border: "1px solid #000", backgroundColor: "#fff", color: "#000", width: "217px" }}>
+            <button
+              style={{
+                padding: "10px 20px",
+                border: "1px solid #000",
+                cursor: "pointer",
+                backgroundColor: "#fff",
+                color: "#000",
+                display: "flex",
+                alignItems: "center",
+                fontSize: "15px",
+                width: "217px",
+              }}
+              onClick={addToWishlist}
+              onMouseEnter={() => setHoveredIcon("heart")}
+              onMouseLeave={() => setHoveredIcon(null)}
+            >
               <i
                 className="fas fa-heart"
                 style={{
-                  marginRight: "20px",
+                  margin: "0px 20px 0px 0px",
                   fontSize: "24px",
-                  color: isInWishlist ? "#ff0000" : hoveredIcon === "heart" ? "#ff0000" : "#ccc",
+                  cursor: "pointer",
+                  color: isInWishlist
+                    ? "#ff0000"
+                    : hoveredIcon === "heart"
+                    ? "#ff0000"
+                    : "#ccc",
                   transition: "color 0.3s ease",
                 }}
               ></i>
@@ -259,16 +413,47 @@ const ProductProfile = () => {
             </button>
           </div>
 
-          <div style={{ display: "flex", gap: "50px", marginBottom: "20px" }}>
-            <button onClick={buyNow} style={{ padding: "16px 25px", backgroundColor: "#000", color: "#fff", fontSize: "25px", display: "flex", alignItems: "center" }}>
-              <i className="fas fa-credit-card" style={{ marginRight: "10px" }}></i>
+          {/* Additional Action Buttons */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "50px",
+              marginBottom: "20px",
+            }}
+          >
+            <button
+              style={{
+                padding: "16px 25px",
+                backgroundColor: "#000",
+                color: "#fff",
+                cursor: "pointer",
+                fontSize: "25px",
+                display: "flex",
+                marginLeft: "0px",
+                alignItems: "center",
+              }}
+              onClick={buyNow}
+            >
+              <i
+                className="fas fa-credit-card"
+                style={{ marginRight: "10px" }}
+              ></i>
               Buy Now
             </button>
           </div>
         </div>
-
-        {/* Right Side Section: Eco Criteria + Alternatives */}
-        <div style={{ position: "sticky", right: "0", width: "120px", paddingRight: "10px", backgroundColor: "#fff", zIndex: "1", marginTop: "150px" }}>
+        <div
+          style={{
+            position: "sticky",
+            right: "0",
+            width: "120px",
+            paddingRight: "10px",
+            backgroundColor: "#fff",
+            zIndex: "1",
+            marginTop: "150px",
+          }}
+        >
           <EnvironmentCriteria
             ecoScore={product.ecoScore}
             details={{
@@ -281,10 +466,9 @@ const ProductProfile = () => {
               durability: product.durability,
             }}
           />
-          <Alternative productId={productId} />
-        </div>
+          <Alternative productId={product._id} category={product.category} />
+          </div>
       </div>
-      <Footer />
     </>
   );
 };

@@ -12,7 +12,7 @@ import Wishlist from "./Components/Wishlist";
 import Bestproduct from "./Components/Bestproduct";
 import Cart from "./Components/Cart";
 import Edit from "./Components/Edit";
-import Wishlist from "./Components/Wishlist";
+import Alternative from "./Components/Alternative";
 
 function PrivateRoute({ element }) {
   const token = localStorage.getItem("token");
@@ -64,6 +64,7 @@ function AppContent() {
         <Route path="/profile" element={<PrivateRoute element={<ProfileDetails />} />} />
         <Route path="/bestproduct" element={<PrivateRoute element={<Bestproduct />} />} />
         <Route path="/edit" element={<PrivateRoute element={<Edit />} />} />
+        <Route path="/alternatives/:category/:id" element={<Alternative />} />
 
       </Routes>
 

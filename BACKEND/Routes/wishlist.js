@@ -1,37 +1,42 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../db"); // ✅ DB connection
-const authenticate = require("../Middlewares/authmiddleware"); // ✅ Auth middleware
+const db = require("../db"); // ✅ Ensure correct db import
+const authenticate = require("../Middlewares/authmiddleware");
 
-// ✅ Get all wishlist items for the logged-in user
+// ✅ Route to get wishlist items
 router.get("/", authenticate, async (req, res) => {
     const userId = req.user.userId;
 
     try {
+        // ❌ db.promise().query(...) ka use mat karo
         const [wishlistItems] = await db.query(
-            // `SELECT id, productId, name, price, image, quantity, FROM wishlist WHERE userId = ?`,
-            `SELECT id, name, price, image, quantity, (price * quantity) AS totalPrice FROM wishlist WHERE userId = ?`,
+            `SELECT id, name, price, image, description FROM wishlist WHERE userId = ?`,
             [userId]
         );
+
         res.status(200).json(wishlistItems);
     } catch (error) {
-        console.error("❌ Error fetching wishlist:", error);
+        console.error("Error fetching wishlist:", error);
         res.status(500).json({ message: "Internal Server Error" });
     }
 });
 
-// ✅ Add a product to wishlist
+// ✅ Route to add to wishlist
 router.post("/add", authenticate, async (req, res) => {
-    const { productId, name, price, image, quantity = 1 } = req.body;
+    console.log("✅ Incoming request body:", req.body); // 🔍 Check what frontend is sending
+
+    const { id: productId, name, price, image, description } = req.body;
     const userId = req.user.userId;
 
-    if (!productId || !name || !price || !image) {
+    // ✅ Check if required fields are missing
+    if (!productId || !name || !price || !image || !description) {
+        console.log("❌ Missing required fields:", req.body);
         return res.status(400).json({ message: "Missing required fields" });
     }
 
     try {
         const [existing] = await db.query(
-            "SELECT * FROM wishlist WHERE userId = ? AND productId = ?",
+            "SELECT * FROM wishlist WHERE userId = ? AND id = ?",
             [userId, productId]
         );
 
@@ -40,53 +45,32 @@ router.post("/add", authenticate, async (req, res) => {
         }
 
         await db.query(
-            "INSERT INTO wishlist (userId, productId, name, price, image, quantity) VALUES (?, ?, ?, ?, ?, ?)",
-            [userId, productId, name, price, image, quantity]
+            "INSERT INTO wishlist (userId, id, name, price, image, description) VALUES (?, ?, ?, ?, ?, ?)",
+            [userId, productId, name, price, image, description]
         );
 
         res.status(201).json({ message: "Item added to wishlist" });
     } catch (error) {
-        console.error("❌ Error adding item to wishlist:", error);
-        res.status(500).json({ message: "Internal Server Error" });
-    }
-});
-
-// ✅ Update quantity of a wishlist item
-router.put("/update/:id", authenticate, async (req, res) => {
-    const userId = req.user.userId;
-    const wishlistItemId = req.params.id;
-    const { quantity } = req.body;
-
-    if (!quantity || quantity < 1) {
-        return res.status(400).json({ message: "Invalid quantity" });
-    }
-
-    try {
-        await db.query(
-            "UPDATE wishlist SET quantity = ? WHERE id = ? AND userId = ?",
-            [quantity, wishlistItemId, userId]
-        );
-        res.status(200).json({ message: "Quantity updated successfully" });
-    } catch (error) {
-        console.error("❌ Error updating quantity:", error);
-        res.status(500).json({ message: "Internal Server Error" });
+        console.error("❌ Error adding to wishlist:", error.message, error.stack);
+        res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
 });
 
 
-// ✅ Remove a product from the wishlist by wishlist item ID
+// ✅ Route to remove from wishlist
 router.delete("/remove/:id", authenticate, async (req, res) => {
     const userId = req.user.userId;
-    const wishlistItemId = req.params.id;
+    const productId = req.params.id;
 
     try {
         await db.query(
             "DELETE FROM wishlist WHERE userId = ? AND id = ?",
-            [userId, wishlistItemId]
+            [userId, productId]
         );
+
         res.status(200).json({ message: "Item removed from wishlist" });
     } catch (error) {
-        console.error("❌ Error removing item from wishlist:", error);
+        console.error("Error removing from wishlist:", error);
         res.status(500).json({ message: "Internal Server Error" });
     }
 });
