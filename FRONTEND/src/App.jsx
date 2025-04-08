@@ -20,6 +20,7 @@ function PrivateRoute({ element }) {
   return token ? element : <Navigate to="/login" replace />;
 }
 
+// ✅ Redirect to /home if already logged in
 function AuthRedirect({ element }) {
   const token = localStorage.getItem("token");
   console.log("AuthRedirect Token:", token); // Debugging
@@ -43,7 +44,7 @@ function App() {
 }
 
 function AppContent() {
-  const location = useLocation(); // Get the current path
+  const location = useLocation();
 
   return (
     <>
@@ -64,6 +65,8 @@ function AppContent() {
         <Route path="/bestproduct" element={<PrivateRoute element={<Bestproduct />} />} />
         <Route path="/search/:term" element={<SearchResults />} />
         <Route path="/edit" element={<PrivateRoute element={<Edit />} />} />
+        {/* <Route path="/alternatives/:category/:id" element={<Alternative />} /> */}
+
       </Routes>
 
       {/* Show Footer only if not on login/signup pages */}

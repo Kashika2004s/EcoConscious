@@ -15,8 +15,8 @@ const productsRouter = require("./Routes/products");
 const bestProductRouter = require("./Routes/bestProduct");
 const profileRouter = require("./Routes/profile");
 const wishlistRouter=require("./Routes/wishlist");
-const cartRouter=require("./Routes/cart");
 const deleteRouter=require("./Routes/delete");
+const cartRouter=require("./Routes/cart");
 const editRouter=require("./Routes/edit");
 const searchRouter = require("./Routes/search");
 
