@@ -4,24 +4,38 @@ const authenticateToken = require("../Middlewares/tokenAuthentication");
 
 const router = express.Router();
 
-// PUT route to update user details using token info
+// PUT /api/edit
 router.put("/", authenticateToken, async (req, res) => {
   console.log("✅ Edit route hit");
-  console.log("🔹 Extracted User ID:", req.user.userId);
+  const userId = req.user.userId;
 
-  const {fullname, address, phoneNumber } = req.body;
-  const userId = req.user.id; // Get user ID from token
+  const {
+    username,
+    first_name,
+    last_name,
+    phoneNumber,
+    street,
+    city,
+    state_zip
+  } = req.body;
 
   try {
     const [result] = await db.execute(
-      "UPDATE users SET fullname = ?, address = ?, phoneNumber = ? WHERE userId = ?",
-      [fullname, address, phoneNumber, userId]
+      `UPDATE users 
+       SET username = ?, 
+           first_name = ?, 
+           last_name = ?, 
+           phoneNumber = ?, 
+           street = ?, 
+           city = ?, 
+           state_zip = ? 
+       WHERE userid = ?`,
+      [username, first_name, last_name, phoneNumber, street, city, state_zip, userId]
     );
 
-    console.log("🔹 DB Update Result:", result);
+    console.log("DB Update Result:", result);
 
     if (result.affectedRows === 0) {
-      console.log("❌ User not found or no changes made");
       return res.status(404).json({ message: "User not found or no changes made" });
     }
 

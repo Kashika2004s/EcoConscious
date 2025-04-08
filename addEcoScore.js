@@ -1,17 +1,13 @@
 const mysql = require("mysql2");
 const dotenv = require("dotenv");
 
-dotenv.config(); // Load environment variables from a .env file
-
-// Database connection setup
+dotenv.config(); 
 const db = mysql.createConnection({
   host: process.env.DB_HOST || "localhost",
   user: process.env.DB_USER || "jashanjitkaur007",
   password: process.env.DB_PASS || "123456",
   database: process.env.DB_NAME || "ecommerce",
 });
-
-// Function to calculate the ecoScore
 const calculateEcoScore = (product) => {
   let score = 0;
   const carbonFootprint = product.carbonFootprint || 0;
@@ -27,8 +23,6 @@ const calculateEcoScore = (product) => {
     : "low";
   const biodegradability = product.biodegradability || 0;
   const durability = product.durability || "0 months";
-
-  // Scoring calculations
   score += carbonFootprint * 0.2;
   const materialSourcingScores = { good: 40, better: 70, best: 100 };
   score += (materialSourcingScores[materialSourcing] || 40) * 0.2;
@@ -38,8 +32,6 @@ const calculateEcoScore = (product) => {
   const energyEfficiencyScores = { high: 100, moderate: 70, low: 40 };
   score += (energyEfficiencyScores[energyEfficiency] || 40) * 0.1;
   score += biodegradability * 0.1;
-
-  // Convert durability to months
   const durabilityInMonths = durability.includes("month")
     ? parseInt(durability)
     : parseInt(durability) * 12;
@@ -48,8 +40,6 @@ const calculateEcoScore = (product) => {
 
   return parseFloat(Math.min(score, 100).toFixed(2));
 };
-
-// Fetch products from the database
 db.query("SELECT * FROM products", (err, results) => {
   if (err) {
     console.error("Error fetching data from database:", err);
@@ -60,8 +50,6 @@ db.query("SELECT * FROM products", (err, results) => {
     const ecoScore = calculateEcoScore(product);
     return { id: product.id, ecoScore };
   });
-
-  // Update ecoScore for each product
   updatedProducts.forEach(({ id, ecoScore }) => {
     db.query(
       "UPDATE products SET ecoScore = ? WHERE id = ?",
@@ -76,5 +64,5 @@ db.query("SELECT * FROM products", (err, results) => {
     );
   });
 
-  db.end(); // Close the database connection
+  db.end();
 });

@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../db"); // Ensure this points to your MySQL connection
-
-// Fetch all products
+const db = require("../db");
 router.get("/", async (req, res) => {
   try {
     console.log("Fetching all products...");
@@ -65,5 +63,4 @@ router.get("/:id", async (req, res) => {
     res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 });
-
 module.exports = router;

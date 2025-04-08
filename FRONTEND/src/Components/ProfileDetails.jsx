@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
 const ProfileDetails = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
+
   useEffect(() => {
     const fetchProfile = async () => {
       if (!token) {
@@ -26,7 +28,7 @@ const ProfileDetails = () => {
         }
 
         const data = await response.json();
-        console.log("Fetched Data:", data); 
+        console.log("Fetched Data:", data);
         setProfile(data.user);
         setLoading(false);
       } catch (error) {
@@ -38,6 +40,7 @@ const ProfileDetails = () => {
 
     fetchProfile();
   }, [token, navigate]);
+
   const handleDelete = async () => {
     try {
       const response = await fetch("http://localhost:3000/api/delete", {
@@ -60,13 +63,10 @@ const ProfileDetails = () => {
     }
   };
 
-  if (!profile) {
-    return <div>Loading...</div>;
-  }
-
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
   if (!profile) return <div>No profile data available</div>;
+
   const styles = {
     whole: {
       display: "flex",
@@ -83,7 +83,6 @@ const ProfileDetails = () => {
       padding: "40px",
       backgroundColor: "#ffffff",
       boxShadow: "0px 5px 20px rgba(0, 0, 0, 0.1)",
-      //borderRadius: "8px",
     },
     headingContainer: {
       display: "flex",
@@ -95,11 +94,6 @@ const ProfileDetails = () => {
       fontSize: "24px",
       marginLeft: "10px",
       color: "#333",
-    },
-    icon: {
-      fontSize: "32px",
-      color: "#333",
-      opacity: "0.8",
     },
     detailGroup: {
       marginBottom: "20px",
@@ -122,7 +116,7 @@ const ProfileDetails = () => {
     buttonGroup: {
       display: "flex",
       justifyContent: "center",
-      gap:"20px",
+      gap: "20px",
       marginTop: "20px",
     },
     button: {
@@ -142,28 +136,56 @@ const ProfileDetails = () => {
     <div style={styles.whole}>
       <div style={styles.container}>
         <div style={styles.headingContainer}>
-         
           <h2 style={styles.heading}>Profile Details</h2>
         </div>
-        {/* <div style={styles.detailGroup}>
-          <span style={styles.label}>Username</span>
-          <span style={styles.value}>{profile.username}</span>
-        </div> */}
+
         <div style={styles.detailGroup}>
           <span style={styles.label}>Full Name</span>
-          <span style={styles.value}>{profile.fullname}</span>
+          <span style={styles.value}>
+            {profile.first_name} {profile.last_name}
+          </span>
         </div>
+
         <div style={styles.detailGroup}>
-          <span style={styles.label}>Mobile Number</span>
-          <span style={styles.value}>{profile.phoneNumber}</span>
+          <span style={styles.label}>Username</span>
+          <span style={styles.value}>{profile.username}</span>
         </div>
+
         <div style={styles.detailGroup}>
-          <span style={styles.label}>Email ID</span>
+          <span style={styles.label}>Email</span>
           <span style={styles.value}>{profile.email}</span>
         </div>
+
         <div style={styles.detailGroup}>
-          <span style={styles.label}>Address</span>
-          <span style={styles.value}>{profile.address}</span>
+          <span style={styles.label}>Phone Number</span>
+          <span style={styles.value}>{profile.phoneNumber}</span>
+        </div>
+
+        <div style={styles.detailGroup}>
+          <span style={styles.label}>Verified</span>
+          <span style={styles.value}>{profile.isVerified ? "Yes" : "No"}</span>
+        </div>
+
+        <div style={styles.detailGroup}>
+          <span style={styles.label}>Street</span>
+          <span style={styles.value}>{profile.street}</span>
+        </div>
+
+        <div style={styles.detailGroup}>
+          <span style={styles.label}>City</span>
+          <span style={styles.value}>{profile.city}</span>
+        </div>
+
+        <div style={styles.detailGroup}>
+          <span style={styles.label}>State & ZIP</span>
+          <span style={styles.value}>{profile.state_zip}</span>
+        </div>
+
+        <div style={styles.detailGroup}>
+          <span style={styles.label}>Created At</span>
+          <span style={styles.value}>
+            {new Date(profile.created_at).toLocaleString()}
+          </span>
         </div>
 
         <div style={styles.buttonGroup}>
@@ -175,6 +197,7 @@ const ProfileDetails = () => {
           </button>
         </div>
       </div>
+
       <style jsx>{`
         @media (max-width: 768px) {
           .container {
@@ -185,7 +208,8 @@ const ProfileDetails = () => {
             font-size: 20px;
           }
 
-          .label, .value {
+          .label,
+          .value {
             font-size: 16px;
           }
 
@@ -204,7 +228,8 @@ const ProfileDetails = () => {
             font-size: 18px;
           }
 
-          .label, .value {
+          .label,
+          .value {
             font-size: 14px;
           }
         }

@@ -60,6 +60,7 @@ const Navbar = () => {
     } else if (searchTerm.trim()) {
       navigate(`/search/${searchTerm}`); // Default search behavior
       }
+      setSearchTerm("");
 };
   
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);

@@ -6,8 +6,6 @@ require("dotenv").config();
 router.get("/verify", async (req, res) => {
   try {
     const { token } = req.query;
-
-    // Check if token exists
     const [users] = await db.execute("SELECT * FROM users WHERE verification_token = ?", [token]);
     if (users.length === 0) {
       return res.status(400).json({ message: "Invalid or expired token!" });

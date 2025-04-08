@@ -1,11 +1,8 @@
 const express = require("express");
 const mysql = require("mysql2/promise");
 const dotenv = require("dotenv");
-
 dotenv.config();
 const router = express.Router();
-
-// Database connection
 const pool = mysql.createPool({
   host: process.env.DB_HOST || "localhost",
   user: process.env.DB_USER || "root",
@@ -15,13 +12,9 @@ const pool = mysql.createPool({
   connectionLimit: 10,
   queueLimit: 0,
 });
-
-// Route to fetch the best ecoScore product from each category
 router.get("/", async (req, res) => {
   try {
     const connection = await pool.getConnection();
-
-    // Query to get the best ecoScore product for each category
     const query = `
       SELECT p.*
       FROM products p
@@ -32,19 +25,15 @@ router.get("/", async (req, res) => {
           GROUP BY category
       ) best ON p.category = best.category AND p.ecoScore = best.maxEcoScore;
     `;
-
     const [rows] = await connection.query(query);
-    connection.release(); // Release the connection
-
+    connection.release();
     if (rows.length === 0) {
       return res.status(404).json({ message: "No products found in any category" });
     }
-
     res.json(rows);
   } catch (error) {
     console.error("Error fetching products:", error);
     res.status(500).json({ message: "Server error" });
   }
 });
-
 module.exports = router;

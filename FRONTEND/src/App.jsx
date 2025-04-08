@@ -12,8 +12,7 @@ import Wishlist from "./Components/Wishlist";
 import Bestproduct from "./Components/Bestproduct";
 import Cart from "./Components/Cart";
 import Edit from "./Components/Edit";
-import Alternative from "./Components/Alternative";
-
+import SearchResults from "./Components/SearchResults";
 function PrivateRoute({ element }) {
   const token = localStorage.getItem("token");
   console.log("PrivateRoute Token:", token); // Debugging
@@ -49,8 +48,9 @@ function AppContent() {
 
   return (
     <>
-      {/* Show Navbar except on login/signup pages */}
-      {location.pathname !== "/" && location.pathname !== "/signup" && <Navbar />}
+      {/* Show Navbar only if not on login/signup pages */}
+      {!["/", "/signup", "/login"].includes(location.pathname) && <Navbar />}
+
 
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
@@ -63,13 +63,15 @@ function AppContent() {
         <Route path="/cart" element={<PrivateRoute element={<Cart />} />} />
         <Route path="/profile" element={<PrivateRoute element={<ProfileDetails />} />} />
         <Route path="/bestproduct" element={<PrivateRoute element={<Bestproduct />} />} />
+        <Route path="/search/:term" element={<SearchResults />} />
         <Route path="/edit" element={<PrivateRoute element={<Edit />} />} />
         <Route path="/alternatives/:category/:id" element={<Alternative />} />
 
       </Routes>
 
-      {/* Show Footer except on login/signup pages */}
-      {location.pathname !== "/" && location.pathname !== "/signup" && <Footer />}
+      {/* Show Footer only if not on login/signup pages */}
+      {!["/", "/signup", "/login"].includes(location.pathname) && <Footer />}
+
     </>
   );
 }

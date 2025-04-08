@@ -11,19 +11,19 @@ const authenticateToken = (req, res, next) => {
   }
 
   const token = authHeader.split(" ")[1];
+  console.log("Extracted Token:", token);
 
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) {
       console.log("Token verification failed:", err.message);
       return res.status(403).json({ message: "Forbidden: Invalid token" });
     }
-  
-    console.log("Token Verified! Extracted user:", user);
-    
-    // ✅ Ensure this matches how you created the token
-    req.user = { userId: user.id };
+
+    console.log("✅ Token Verified! Extracted user:", user);
+
+    req.user = { userId: user.userId, email: user.email }; // ✅ this matches your token payload
     next();
   });
-};  
+};
 
 module.exports = authenticateToken;

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, Link } from "react-router-dom";
 import SecondaryNavbar from "./SecondaryNavbar";
-import Navbar from "./Navbar";
 
 const ProductList = () => {
   const { category } = useParams();
@@ -11,7 +10,6 @@ const ProductList = () => {
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState("");
   const [sortOption, setSortOption] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
 
   const categoryMapping = {
     beauty: "Beauty Products",
@@ -19,21 +17,14 @@ const ProductList = () => {
     bags: "Bags",
     clothing: "Clothing",
   };
-  const normalizedCategory = categoryMapping[category?.toLowerCase()] || category;
 
-  useEffect(() => {
-    setFilter("");
-    setSortOption("");
-    setSearchTerm("");
-  }, [normalizedCategory]);
+  const normalizedCategory = categoryMapping[category?.toLowerCase()] || category;
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const token = localStorage.getItem("token");
-        if (!token) {
-          throw new Error("Unauthorized. Please log in.");
-        }
+        if (!token) throw new Error("Unauthorized. Please log in.");
 
         const response = await axios.get("http://localhost:3000/api/products", {
           headers: { Authorization: `Bearer ${token}` },
@@ -55,82 +46,28 @@ const ProductList = () => {
     fetchProducts();
   }, [normalizedCategory]);
 
-  const processProducts = () => {
-    return products
-      .filter((product) => {
-        if (!filter) return true;
-        const conditions = {
-          low_carbon_footprint: product.carbonFootprint < 5,
-          material_sourcing_good: product.materialSourcing === "good",
-          material_sourcing_better: product.materialSourcing === "better",
-          material_sourcing_best: product.materialSourcing === "best",
-          high_recyclability: product.recyclability >= 85,
-          low_water_usage: product.waterUsage === "low",
-          high_energy_efficiency: product.energyEfficiency === "high",
-          high_biodegradability: product.biodegradability > 90,
-        };
-        return conditions[filter];
-      })
-      .filter((product) => product.name.toLowerCase().includes(searchTerm.toLowerCase()))
-      .sort((a, b) => {
-        if (sortOption === "price_low_high") return a.price - b.price;
-        if (sortOption === "price_high_low") return b.price - a.price;
-        return 0;
-      });
-  };
+  const filteredProducts = products.filter((product) => {
+    const conditions = {
+      low_carbon_footprint: product.carbonFootprint < 5,
+      material_sourcing_good: product.materialSourcing === "good",
+      material_sourcing_better: product.materialSourcing === "better",
+      material_sourcing_best: product.materialSourcing === "best",
+      high_recyclability: product.recyclability >= 85,
+      low_water_usage: product.waterUsage === "low",
+      high_energy_efficiency: product.energyEfficiency === "high",
+      high_biodegradability: product.biodegradability > 90,
+    };
+    return !filter || conditions[filter];
+  });
 
-  if (loading) return <p>Loading products...</p>;
-  if (error) return (
-    <div>
-      <p>Error fetching products: {error.message}</p>
-      <button onClick={() => window.location.reload()}>Retry</button>
-    </div>
-  );
-
-  const filterProducts = (products) => {
-    let filtered = products;
-
-    if (filter) {
-      filtered = filtered.filter((product) => {
-        const filterConditions = {
-          low_carbon_footprint: product.carbonFootprint < 5,
-          material_sourcing_good: product.materialSourcing === "good",
-          material_sourcing_better: product.materialSourcing === "better",
-          material_sourcing_best: product.materialSourcing === "best",
-          high_recyclability: product.recyclability >= 85,
-          low_water_usage: product.waterUsage === "low",
-          high_energy_efficiency: product.energyEfficiency === "high",
-          high_biodegradability: product.biodegradability > 90,
-        };
-        return filterConditions[filter] || true;
-      });
-    }
-
-    if (searchTerm) {
-      filtered = filtered.filter((product) =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    return filtered;
-  };
-
-  const sortProducts = (products) => {
-    let sortedProducts = [...products];
-
-    if (sortOption === "price_low_high") {
-      sortedProducts.sort((a, b) => a.price - b.price);
-    } else if (sortOption === "price_high_low") {
-      sortedProducts.sort((a, b) => b.price - a.price);
-    }
-
-    return sortedProducts;
-  };
-
-  const processedProducts = sortProducts(filterProducts(products));
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    if (sortOption === "price_low_high") return a.price - b.price;
+    if (sortOption === "price_high_low") return b.price - a.price;
+    return 0;
+  });
 
   const getFilterTag = (product) => {
-    const filterTags = {
+    const tags = {
       low_carbon_footprint: `Low Carbon Footprint: ${product.carbonFootprint}`,
       material_sourcing_good: "Material Sourcing: Good",
       material_sourcing_better: "Material Sourcing: Better",
@@ -140,8 +77,7 @@ const ProductList = () => {
       high_energy_efficiency: "High Energy Efficiency",
       high_biodegradability: `High Biodegradability: ${product.biodegradability}%`,
     };
-
-    return filterTags[filter] || "";
+    return tags[filter] || "";
   };
 
   if (loading) return <p>Loading products...</p>;
@@ -156,11 +92,24 @@ const ProductList = () => {
         onFilterSelect={setFilter}
       />
       <div style={styles.app}>
+        {filter && (
+          <div style={styles.filterInfo}>
+            <p>
+              Filter applied: <strong>{filter.replace(/_/g, " ")}</strong>
+            </p>
+            <button
+              onClick={() => setFilter("")}
+              style={styles.clearFilterButton}
+            >
+              Clear Filter
+            </button>
+          </div>
+        )}
         <div style={styles.productGrid}>
-          {processedProducts.length === 0 ? (
+          {sortedProducts.length === 0 ? (
             <p>No products match the selected criteria.</p>
           ) : (
-            processedProducts.map((product) => (
+            sortedProducts.map((product) => (
               <Link
                 to={`/products/${category}/${product.id}`}
                 key={product.id}
@@ -194,6 +143,22 @@ const styles = {
     padding: "20px",
     width: "80%",
     margin: "0 auto",
+  },
+  filterInfo: {
+    textAlign: "center",
+    marginBottom: "20px",
+  },
+  clearFilterButton: {
+    backgroundColor: "#fff",
+    border: "1px solid #ccc",
+    borderRadius: "5px",
+    padding: "10px 18px",
+    cursor: "pointer",
+    fontSize: "14px",
+    //fontWeight: 2000,
+    color: "#333",
+    transition: "all 0.2s ease-in-out",
+    boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
   },
   productGrid: {
     display: "grid",

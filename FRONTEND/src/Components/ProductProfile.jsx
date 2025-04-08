@@ -47,7 +47,7 @@ const ProductProfile = () => {
       try {
           const response = await fetch("http://localhost:3000/api/wishlist", {
               headers: {
-                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                  Authorization:` Bearer ${localStorage.getItem("token")}`,
                   "Content-Type": "application/json",
               },
           });
