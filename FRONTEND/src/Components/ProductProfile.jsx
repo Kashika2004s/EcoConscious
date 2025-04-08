@@ -14,7 +14,9 @@ const ProductProfile = () => {
   const [isInWishlist, setIsInWishlist] = useState(false);
   const [hoveredIcon, setHoveredIcon] = useState(null);
   const { id } = useParams();
-  const productId = parseInt(id, 10);
+  // const productId = parseInt(id, 10);
+  const productId = id; // because it's a string (varchar)
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -55,7 +57,7 @@ const ProductProfile = () => {
           
           if (response.ok) {
               // ✅ Check against id, not productId
-              const inWishlist = data.some((item) => item.id === productId);
+              const inWishlist = data.some((item) => item.id === product?.id); // or ._id if needed
               console.log("🛍 Wishlist contains product:", inWishlist);
               setIsInWishlist(inWishlist);
           } else {

@@ -65,7 +65,7 @@ function AppContent() {
         <Route path="/bestproduct" element={<PrivateRoute element={<Bestproduct />} />} />
         <Route path="/search/:term" element={<SearchResults />} />
         <Route path="/edit" element={<PrivateRoute element={<Edit />} />} />
-        <Route path="/alternatives/:category/:id" element={<Alternative />} />
+        {/* <Route path="/alternatives/:category/:id" element={<Alternative />} /> */}
 
       </Routes>
 

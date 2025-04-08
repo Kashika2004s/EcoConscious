@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import logo from "./download.png";
 import axios from "axios";
+import "./Styles/congratulationsText.css";
 import { Link } from "react-router-dom";
-import LoadingButton from "./LoadingButton"; // if you're using a separate ecoScore button
-import logo from "../assets/logo.png"; // path as per your logo
-import PropTypes from "prop-types";
+
 const Alternative = ({ productId, category }) => {
   const [alternatives, setAlternatives] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,7 +24,6 @@ const Alternative = ({ productId, category }) => {
             },
           }
         );
-        
 
         setAlternatives(response.data);
       } catch (error) {
@@ -43,88 +42,79 @@ const Alternative = ({ productId, category }) => {
     }
   }, [category, productId]);
 
-
-  const toggleDrawer = () => setShowDrawer(!showDrawer);
-  const closeDrawer = () => setShowDrawer(false);
+  const toggleDrawer = () => {
+    setShowDrawer(!showDrawer);
+  };
+  const closeDrawer = () => {
+    setShowDrawer(false);
+  };
 
   return (
     <div style={styles.container}>
-      <button
-        style={styles.logoButton}
-        onClick={toggleDrawer}
-        aria-label="Open Alternatives Drawer"
-      >
+      <button style={styles.logoButton} onClick={toggleDrawer}>
         <img src={logo} alt="Logo" style={styles.logoImage} />
       </button>
-
       <div
         style={{
           ...styles.drawer,
           right: showDrawer ? 0 : "-400px",
         }}
       >
-        <button
-          style={styles.closeButton}
-          onClick={closeDrawer}
-          aria-label="Close Drawer"
-        >
+        <button style={styles.closeButton} onClick={closeDrawer}>
           &times;
         </button>
         <h3 style={styles.title}>Alternatives</h3>
+        {loading && <p>Loading...</p>}
+        {error && <p>Error: {error}</p>}
 
-        {!loading && alternatives.length === 0 ? (
-          <div className="congratulationsText">
-            <p>
-              🎉 Congratulations, you've selected one of the most eco-friendly
-              options available!
-            </p>
-          </div>
-        ) : (
-
-
-          <div style={styles.alternativeGrid}>
-  {alternatives.map((product) => (
-    <Link
-      to={`/products/${product.category}/${product.id}`}
-      key={product.id}
-      style={{ textDecoration: "none", color: "inherit" }}
-      onClick={closeDrawer}
-    >
-      <div style={styles.alternativeCard}>
-        <img
-          src={product.image}
-          alt={product.name}
-          style={styles.alternativeImage}
-        />
-        <h3 style={styles.productName}>{product.name}</h3>
-        <div style={styles.productDetails}>
-          <p style={styles.productPrice}>${product.price}</p>
-          <LoadingButton ecoScore={product.ecoScore} />
+        <div style={styles.alternativeGrid}>
+          {alternatives.length === 0 ? (
+            <div className="congratulationsText">
+              <p>
+                Congratulations, you've selected one of the most eco-friendly
+                options available!
+              </p>
+            </div>
+          ) : (
+            alternatives.map((product) => (
+              <Link
+                to={`/products/${product.category}/${product.id}`}
+                key={product.id}
+                style={{ textDecoration: "none", color: "inherit" }}
+                onClick={closeDrawer}
+              >
+                <div style={styles.alternativeCard}>
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    style={styles.alternativeImage}
+                  />
+                  <h3 style={styles.productName}>{product.name}</h3>
+                  <div style={styles.productDetails}>
+                    <p style={styles.productPrice}>${product.price}</p>
+                    <LoadingButton ecoScore={product.ecoScore} />
+                  </div>
+                </div>
+              </Link>
+            ))
+          )}
         </div>
       </div>
-    </Link>
-  ))}
-</div>
-
-        )}
-      </div>
-
       {showDrawer && <div style={styles.overlay} onClick={closeDrawer}></div>}
     </div>
   );
 };
-
-const EcoScoreCircle = ({ ecoScore }) => {
+const LoadingButton = ({ ecoScore }) => {
   const [currentScore, setCurrentScore] = useState(0);
-
   useEffect(() => {
-    let score = 0;
+    let currentScoreValue = 0;
     const interval = setInterval(() => {
-      score += 1;
-      if (score >= ecoScore) clearInterval(interval);
-      setCurrentScore(score);
+      currentScoreValue += 1;
+      if (currentScoreValue >= ecoScore) {
+        clearInterval(interval);
+      }
+      setCurrentScore(currentScoreValue);
     }, 5);
-    return () => clearInterval(interval);
   }, [ecoScore]);
 
   return (
@@ -184,20 +174,8 @@ const EcoScoreCircle = ({ ecoScore }) => {
     </div>
   );
 };
-
-Alternative.propTypes = {
-  productId: PropTypes.string.isRequired,
-  category: PropTypes.string.isRequired,
-};
-
 const styles = {
-  container: {
-    position: "relative",
-  },
   logoButton: {
-    position: "fixed",
-    bottom: "30px",
-    right: "30px",
     backgroundColor: "transparent",
     border: "none",
     cursor: "pointer",
@@ -208,7 +186,6 @@ const styles = {
     alignItems: "center",
     justifyContent: "center",
     boxShadow: "0px 2px 15px rgba(0, 0, 0, 0.3)",
-    zIndex: 1100,
   },
   logoImage: {
     width: "88px",
@@ -218,11 +195,11 @@ const styles = {
   drawer: {
     position: "fixed",
     top: 0,
-    right: "-500px",
+    right: "-500px", 
     width: "400px",
     height: "100%",
     backgroundColor: "#e7f5e1",
-    boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.1)",
+    boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.1)", 
     padding: "20px",
     transition: "right 0.6s ease-in-out",
     zIndex: 1000,
@@ -247,8 +224,9 @@ const styles = {
   },
   alternativeGrid: {
     display: "grid",
-    gridTemplateColumns: "1fr",
-    gap: "20px",
+    gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+    gap: "10px",
+    marginLeft: "10px",
   },
   alternativeCard: {
     backgroundColor: "#f9f9f9",
@@ -256,6 +234,7 @@ const styles = {
     borderRadius: "10px",
     padding: "20px",
     textAlign: "center",
+    transition: "transform 0.3s ease",
     cursor: "pointer",
     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
     display: "flex",
@@ -272,17 +251,21 @@ const styles = {
   productName: {
     fontSize: "18px",
     color: "#333",
-    marginBottom: "10px",
+    margin: "0px 0px",
   },
   productPrice: {
     color: "#4CAF50",
     fontWeight: "bold",
-    marginBottom: "10px",
+    margin: "0px 0px",
   },
-  productDetails: {
+  ecoScoreContainer: {
     display: "flex",
-    flexDirection: "column",
+    justifyContent: "center",
     alignItems: "center",
+    marginTop: "10px",
+  },
+  ecoScore: {
+    marginLeft: "10px",
   },
   overlay: {
     position: "fixed",
