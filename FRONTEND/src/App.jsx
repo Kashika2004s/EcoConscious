@@ -13,6 +13,7 @@ import Bestproduct from "./Components/Bestproduct";
 import Cart from "./Components/Cart";
 import Edit from "./Components/Edit";
 import SearchResults from "./Components/SearchResults";
+import Alternative from "./Components/Alternative";
 function PrivateRoute({ element }) {
   const token = localStorage.getItem("token");
   console.log("PrivateRoute Token:", token); // Debugging
@@ -65,7 +66,7 @@ function AppContent() {
         <Route path="/bestproduct" element={<PrivateRoute element={<Bestproduct />} />} />
         <Route path="/search/:term" element={<SearchResults />} />
         <Route path="/edit" element={<PrivateRoute element={<Edit />} />} />
-        {/* <Route path="/alternatives/:category/:id" element={<Alternative />} /> */}
+        <Route path="/alternatives/:category/:id" element={<Alternative />} />
 
       </Routes>
 

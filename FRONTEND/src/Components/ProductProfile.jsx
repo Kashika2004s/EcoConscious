@@ -21,6 +21,7 @@ const ProductProfile = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    
 
     const fetchProduct = async () => {
       try {
@@ -45,6 +46,7 @@ const ProductProfile = () => {
         setLoading(false);
       }
     };
+    
     const checkWishlist = async () => {
       try {
           const response = await fetch("http://localhost:3000/api/wishlist", {
@@ -82,7 +84,7 @@ const ProductProfile = () => {
     const value = parseInt(e.target.value, 10) || 1;
     setQuantity(Math.min(Math.max(1, value), 20));
   };
-
+  
   const addToWishlist = async () => {
     if (!product) {
         console.error("❌ Error: Product data is missing");
@@ -468,7 +470,8 @@ const ProductProfile = () => {
               durability: product.durability,
             }}
           />
-          <Alternative productId={product._id} category={product.category} />
+          <Alternative productId={product.id} category={product.category}/>
+
           </div>
       </div>
     </>

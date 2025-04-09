@@ -15,23 +15,21 @@ const Alternative = ({ productId, category }) => {
       try {
         setLoading(true);
         const token = localStorage.getItem("token");
-
         const response = await axios.get(
           `http://localhost:3000/api/alternatives/${category}/${productId}`,
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
 
-        setAlternatives(response.data);
-      } catch (error) {
-        setError(
-          error.response
-            ? error.response.data.message || "Failed to fetch alternatives"
-            : error.message
-        );
+        if (response.data.message) {
+          // Best product
+          setAlternatives([]);
+        } else {
+          setAlternatives(response.data.alternatives || []);
+        }
+      } catch (err) {
+        setError(err.response?.data?.message || "Failed to fetch alternatives");
       } finally {
         setLoading(false);
       }
@@ -42,18 +40,15 @@ const Alternative = ({ productId, category }) => {
     }
   }, [category, productId]);
 
-  const toggleDrawer = () => {
-    setShowDrawer(!showDrawer);
-  };
-  const closeDrawer = () => {
-    setShowDrawer(false);
-  };
+  const toggleDrawer = () => setShowDrawer(!showDrawer);
+  const closeDrawer = () => setShowDrawer(false);
 
   return (
     <div style={styles.container}>
       <button style={styles.logoButton} onClick={toggleDrawer}>
         <img src={logo} alt="Logo" style={styles.logoImage} />
       </button>
+
       <div
         style={{
           ...styles.drawer,
@@ -64,16 +59,14 @@ const Alternative = ({ productId, category }) => {
           &times;
         </button>
         <h3 style={styles.title}>Alternatives</h3>
+
         {loading && <p>Loading...</p>}
         {error && <p>Error: {error}</p>}
 
         <div style={styles.alternativeGrid}>
           {alternatives.length === 0 ? (
             <div className="congratulationsText">
-              <p>
-                Congratulations, you've selected one of the most eco-friendly
-                options available!
-              </p>
+              <p>🎉 Congratulations, you've selected the most eco-friendly option!</p>
             </div>
           ) : (
             alternatives.map((product) => (
@@ -84,11 +77,7 @@ const Alternative = ({ productId, category }) => {
                 onClick={closeDrawer}
               >
                 <div style={styles.alternativeCard}>
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    style={styles.alternativeImage}
-                  />
+                  <img src={product.image} alt={product.name} style={styles.alternativeImage} />
                   <h3 style={styles.productName}>{product.name}</h3>
                   <div style={styles.productDetails}>
                     <p style={styles.productPrice}>${product.price}</p>
@@ -100,21 +89,30 @@ const Alternative = ({ productId, category }) => {
           )}
         </div>
       </div>
-      {showDrawer && <div style={styles.overlay} onClick={closeDrawer}></div>}
+
+      {showDrawer && (
+        <div
+          style={styles.overlay}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) closeDrawer();
+          }}
+        />
+      )}
     </div>
   );
 };
+
 const LoadingButton = ({ ecoScore }) => {
   const [currentScore, setCurrentScore] = useState(0);
+
   useEffect(() => {
-    let currentScoreValue = 0;
+    let current = 0;
     const interval = setInterval(() => {
-      currentScoreValue += 1;
-      if (currentScoreValue >= ecoScore) {
-        clearInterval(interval);
-      }
-      setCurrentScore(currentScoreValue);
+      current += 1;
+      if (current >= ecoScore) clearInterval(interval);
+      setCurrentScore(current);
     }, 5);
+    return () => clearInterval(interval);
   }, [ecoScore]);
 
   return (
@@ -134,21 +132,9 @@ const LoadingButton = ({ ecoScore }) => {
       <svg
         width="50"
         height="50"
-        style={{
-          position: "absolute",
-          top: "0",
-          left: "0",
-          transform: "rotate(-90deg)",
-        }}
+        style={{ position: "absolute", top: "0", left: "0", transform: "rotate(-90deg)" }}
       >
-        <circle
-          cx="25"
-          cy="25"
-          r="20"
-          stroke="#eeeeee"
-          strokeWidth="4"
-          fill="none"
-        />
+        <circle cx="25" cy="25" r="20" stroke="#eee" strokeWidth="4" fill="none" />
         <circle
           cx="25"
           cy="25"
@@ -161,20 +147,17 @@ const LoadingButton = ({ ecoScore }) => {
           style={{ transition: "stroke-dashoffset 0.2s ease" }}
         />
       </svg>
-      <div
-        style={{
-          zIndex: "2",
-          fontSize: "12px",
-          fontWeight: "bold",
-          color: "#76c893",
-        }}
-      >
+      <div style={{ zIndex: 2, fontSize: "12px", fontWeight: "bold", color: "#76c893" }}>
         {currentScore}%
       </div>
     </div>
   );
 };
+
 const styles = {
+  container: {
+    position: "relative",
+  },
   logoButton: {
     backgroundColor: "transparent",
     border: "none",
@@ -195,11 +178,11 @@ const styles = {
   drawer: {
     position: "fixed",
     top: 0,
-    right: "-500px", 
+    right: "-400px",
     width: "400px",
     height: "100%",
     backgroundColor: "#e7f5e1",
-    boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.1)", 
+    boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.1)",
     padding: "20px",
     transition: "right 0.6s ease-in-out",
     zIndex: 1000,
@@ -224,7 +207,7 @@ const styles = {
   },
   alternativeGrid: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+    gridTemplateColumns: "1fr",
     gap: "10px",
     marginLeft: "10px",
   },
@@ -234,7 +217,6 @@ const styles = {
     borderRadius: "10px",
     padding: "20px",
     textAlign: "center",
-    transition: "transform 0.3s ease",
     cursor: "pointer",
     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
     display: "flex",
@@ -257,15 +239,6 @@ const styles = {
     color: "#4CAF50",
     fontWeight: "bold",
     margin: "0px 0px",
-  },
-  ecoScoreContainer: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: "10px",
-  },
-  ecoScore: {
-    marginLeft: "10px",
   },
   overlay: {
     position: "fixed",
