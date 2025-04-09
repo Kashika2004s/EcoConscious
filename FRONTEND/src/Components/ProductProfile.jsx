@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import EnvironmentCriteria from "./EnvironmentCriteria";
 import Alternative from "./Alternative";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import Footer from "./Footer";
+// import Footer from "./Footer";
 
 const ProductProfile = () => {
   const [product, setProduct] = useState(null);
@@ -347,8 +347,11 @@ const ProductProfile = () => {
               <i className="fas fa-credit-card" style={{ marginRight: "10px" }}></i>
               Buy Now
             </button>
+            <Alternative productId={product.id} category={product.category} />
           </div>
+          
         </div>
+        
 
         {/* Right Sticky Panel */}
         <div
@@ -374,10 +377,10 @@ const ProductProfile = () => {
               durability: product.durability,
             }}
           />
-          <Alternative productId={product.id} category={product.category} />
+          
         </div>
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

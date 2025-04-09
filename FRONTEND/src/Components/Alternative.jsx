@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import logo from "./download.png";
 import axios from "axios";
 import "./Styles/congratulationsText.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
 
 const Alternative = ({ productId, category }) => {
   const [alternatives, setAlternatives] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showDrawer, setShowDrawer] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
     const fetchAlternatives = async () => {
@@ -23,7 +24,6 @@ const Alternative = ({ productId, category }) => {
         );
 
         if (response.data.message) {
-          // Best product
           setAlternatives([]);
         } else {
           setAlternatives(response.data.alternatives || []);
@@ -40,64 +40,64 @@ const Alternative = ({ productId, category }) => {
     }
   }, [category, productId]);
 
-  const toggleDrawer = () => setShowDrawer(!showDrawer);
-  const closeDrawer = () => setShowDrawer(false);
+  const toggleModal = () => setShowModal(!showModal);
+
+  // Function to handle the cross button click and navigate back to the product profile page
+  const navigateToProductProfile = () => {
+    console.log("Cross button clicked");  // Check if this is logged in the console
+    navigate(`/products/${category}/${productId}`); // Navigate to the product profile page
+  };
 
   return (
     <div style={styles.container}>
-      <button style={styles.logoButton} onClick={toggleDrawer}>
+      {/* Logo button to toggle modal */}
+      <button style={styles.logoButton} onClick={toggleModal}>
         <img src={logo} alt="Logo" style={styles.logoImage} />
       </button>
 
-      <div
-        style={{
-          ...styles.drawer,
-          right: showDrawer ? 0 : "-400px",
-        }}
-      >
-        <button style={styles.closeButton} onClick={closeDrawer}>
-          &times;
-        </button>
-        <h3 style={styles.title}>Alternatives</h3>
+      {/* Modal */}
+      {showModal && (
+        <div style={styles.overlay}>
+          <div style={styles.modal}>
+            {/* Cross button to close modal and navigate back to product profile */}
+            <button style={styles.closeButton} onClick={navigateToProductProfile}>
+              &#x2715; {/* This is the cross (X) symbol */}
+            </button>
+            <h3 style={styles.title}>Alternatives</h3>
 
-        {loading && <p>Loading...</p>}
-        {error && <p>Error: {error}</p>}
+            {loading && <p>Loading...</p>}
+            {error && <p>Error: {error}</p>}
 
-        <div style={styles.alternativeGrid}>
-          {alternatives.length === 0 ? (
-            <div className="congratulationsText">
-              <p>🎉 Congratulations, you've selected the most eco-friendly option!</p>
-            </div>
-          ) : (
-            alternatives.map((product) => (
-              <Link
-                to={`/products/${product.category}/${product.id}`}
-                key={product.id}
-                style={{ textDecoration: "none", color: "inherit" }}
-                onClick={closeDrawer}
-              >
-                <div style={styles.alternativeCard}>
-                  <img src={product.image} alt={product.name} style={styles.alternativeImage} />
-                  <h3 style={styles.productName}>{product.name}</h3>
-                  <div style={styles.productDetails}>
-                    <p style={styles.productPrice}>${product.price}</p>
-                    <LoadingButton ecoScore={product.ecoScore} />
-                  </div>
+            <div style={styles.alternativeGrid}>
+              {alternatives.length === 0 ? (
+                <div className="congratulationsText">
+                  <p>🎉 Congratulations, you've selected the most eco-friendly option!</p>
                 </div>
-              </Link>
-            ))
-          )}
+              ) : (
+                alternatives.map((product) => (
+                  <Link
+                    to={`/products/${product.category}/${product.id}`}
+                    key={product.id}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <div style={styles.alternativeCard}>
+                      <img src={product.image} alt={product.name} style={styles.alternativeImage} />
+                      <h3 style={styles.productName}>{product.name}</h3>
+                      <div style={styles.productDetails}>
+                        <p style={styles.productPrice}>${product.price}</p>
+                        <LoadingButton ecoScore={product.ecoScore} />
+                      </div>
+                    </div>
+                  </Link>
+                ))
+              )}
+            </div>
+          </div>
         </div>
-      </div>
-
-      {showDrawer && (
-        <div
-          style={styles.overlay}
-          onClick={(e) => {
-            if (e.target === e.currentTarget) closeDrawer();
-          }}
-        />
       )}
+
+      {/* The content outside the modal is blurred when the modal is open */}
+      {showModal && <div style={styles.blurBackground}></div>}
     </div>
   );
 };
@@ -175,26 +175,35 @@ const styles = {
     height: "88px",
     borderRadius: "50%",
   },
-  drawer: {
+  overlay: {
     position: "fixed",
     top: 0,
-    right: "-400px",
-    width: "400px",
-    height: "100%",
-    backgroundColor: "#e7f5e1",
-    boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.1)",
-    padding: "20px",
-    transition: "right 0.6s ease-in-out",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
     zIndex: 1000,
-    overflowY: "auto",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modal: {
+    backgroundColor: "#fff",
+    padding: "20px",
+    borderRadius: "8px",
+    boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
+    width: "80%",
+    maxWidth: "800px",
+    zIndex: 1010,
+    position: "relative",
   },
   closeButton: {
     position: "absolute",
-    top: "80px",
-    left: "5px",
+    top: "10px",
+    left: "10px",
     background: "transparent",
     border: "none",
-    fontSize: "30px",
+    fontSize: "20px",
     cursor: "pointer",
     color: "#333",
   },
@@ -206,10 +215,10 @@ const styles = {
     textAlign: "center",
   },
   alternativeGrid: {
-    display: "grid",
-    gridTemplateColumns: "1fr",
-    gap: "10px",
-    marginLeft: "10px",
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "20px",
+    justifyContent: "center",
   },
   alternativeCard: {
     backgroundColor: "#f9f9f9",
@@ -219,6 +228,7 @@ const styles = {
     textAlign: "center",
     cursor: "pointer",
     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+    flexBasis: "220px",  // Adjust the width of each card
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -240,14 +250,14 @@ const styles = {
     fontWeight: "bold",
     margin: "0px 0px",
   },
-  overlay: {
-    position: "fixed",
+  blurBackground: {
+    filter: "blur(5px)",
+    zIndex: 999,
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    zIndex: 500,
   },
 };
 
