@@ -17,8 +17,13 @@ const ProductProfile = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    if (!token) {
+      setLoading(false);
+      setError("You need to be logged in to view product details.");
+      return;
+    }
 
-    const fetchProduct = async () => {
+    const fetchProductAndWishlist = async () => {
       try {
         // Fetch product details
         const productRes = await fetch(`http://localhost:3000/api/products/${id}`, {
@@ -52,44 +57,15 @@ const ProductProfile = () => {
         setLoading(false);
       }
     };
-    const checkWishlist = async () => {
-      try {
-          const response = await fetch("http://localhost:3000/api/wishlist", {
-              headers: {
-                  Authorization:` Bearer ${localStorage.getItem("token")}`,
-                  "Content-Type": "application/json",
-              },
-          });
-          const data = await response.json();
-          
-          if (response.ok) {
-              // ✅ Check against id, not productId
-              const inWishlist = data.some((item) => item.id === product?.id); // or ._id if needed
-              console.log("🛍 Wishlist contains product:", inWishlist);
-              setIsInWishlist(inWishlist);
-          } else {
-              console.error("Error checking wishlist status");
-          }
-      } catch (error) {
-          console.error("Error checking wishlist:", error);
-      }
-  };
-  
 
-    if (token) {
-      fetchProduct();
-      checkWishlist();
-    } else {
-      setLoading(false);
-      setError("You need to be logged in to view product details.");
-    }
+    fetchProductAndWishlist();
   }, [id]);
 
   const handleQuantityChange = (e) => {
     const value = parseInt(e.target.value, 10) || 1;
     setQuantity(Math.min(Math.max(1, value), 20));
   };
-  
+
   const addToWishlist = async () => {
     if (!product) return;
 
@@ -398,8 +374,8 @@ const ProductProfile = () => {
               durability: product.durability,
             }}
           />
-          <Alternative productId={product._id} category={product.category} />
-          </div>
+          <Alternative productId={product.id} category={product.category} />
+        </div>
       </div>
       <Footer />
     </>
