@@ -7,18 +7,30 @@ const authenticate = require("../Middlewares/authmiddleware"); // ✅ Auth middl
 router.get("/", authenticate, async (req, res) => {
     const userId = req.user.userId;
 
+
+
     try {
         const [cartItems] = await db.query(
             // `SELECT id, productId, name, price, image, quantity, FROM cart WHERE userId = ?`,
             `SELECT id, name, price, image, quantity, (price * quantity) AS totalPrice FROM cart WHERE userId = ?`,
             [userId]
+
         );
         res.status(200).json(cartItems);
+
     } catch (error) {
         console.error("❌ Error fetching cart:", error);
         res.status(500).json({ message: "Internal Server Error" });
+
     }
+
 });
+
+
+
+
+
+/*
 
 
 /*
@@ -106,5 +118,7 @@ router.delete("/remove/:id", authenticate, async (req, res) => {
         res.status(500).json({ message: "Internal Server Error" });
     }
 });
+
+
 
 module.exports = router;

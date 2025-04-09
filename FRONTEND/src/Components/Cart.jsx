@@ -89,6 +89,16 @@ const Cart = () => {
           },
         }
       );
+      const handleQuantityChange = (productId, newQuantity) => {
+        setCartItems((prevItems) =>
+          prevItems.map((item) =>
+            item.productId === productId
+              ? { ...item, quantity: newQuantity }
+              : item
+          )
+        );
+      };
+      
 
       const data = await response.json();
       if (response.ok) {
@@ -121,9 +131,11 @@ const Cart = () => {
   }
 
   return (
-    <div style={{ padding: "90px 90px 0px 90px", maxWidth: "100%", marginBottom: "50px" }}>
+    <div style={{ padding: "90px 90px 0px 90px", maxWidth: "100%" ,marginBottom:"50px"}}>
+      {/* Heading */}
       <h3 style={styles.heading}>Your Cart Items</h3>
 
+      {/* If the cart is empty */}
       {cartItems.length === 0 ? (
         <div
           style={{
@@ -131,7 +143,8 @@ const Cart = () => {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            marginTop: "100px",
+            // height: "50vh",
+            marginTop:"100px",
             textAlign: "center",
           }}
         >
@@ -145,7 +158,7 @@ const Cart = () => {
               color: "#fff",
               border: "none",
               cursor: "pointer",
-              fontSize: "20px",
+              fontSize:"20px",
               borderRadius: "5px",
               marginTop: "20px",
             }}
@@ -155,7 +168,7 @@ const Cart = () => {
         </div>
       ) : (
         <div style={{ display: "flex" }}>
-          {/* Cart Items */}
+          {/* Left Section: Cart Items */}
           <div
             style={{
               flex: 2,
@@ -164,49 +177,78 @@ const Cart = () => {
               gap: "10px",
             }}
           >
+            {cartItems.map((item) => (
+              <div
+                key={item.productId}
+                style={{
+                  width: "40%",
+                  padding: "20px",
+                  border: "1px solid #ddd",
+                  borderRadius: "10px",
+                  boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <img
+                  src={item.image || "https://via.placeholder.com/150"}
+                  alt={item.name}
+                  style={{
+                    width: "100%",
+                    height: "250px",
+                    objectFit: "contain",
+                    borderRadius: "10px",
+                  }}
+                />
+                <h3>{item.name}</h3>
+                <p style={{ color: "#555" }}>Price: ${item.price}</p>
+                <div>
+                  <label htmlFor={`quantity-${item.productId}`}>
+                    Quantity:{" "}
+                  </label>
+                  <input
+                    id={`quantity-${item.productId}`}
+                    type="number"
+                    value={item.quantity}
+                    min="1"
+                    max="20"
+                    onChange={(e) =>
+                      handleQuantityChange(
+                        item.productId,
+                        Number(e.target.value)
+                      )
+                    }
+                    style={{
+                      width: "60px",
+                      padding: "2px",
+                      textAlign: "center",
+                      marginLeft: "5px",
+                    }}
+                  />
+                </div>
 
-{cartItems.map((item) => (
-  <div key={item.id} className="cart-item" style={{ border: '1px solid #ccc', padding: '16px', marginBottom: '10px', display: 'flex', alignItems: 'center' }}>
-    
-    {/* Product Image */}
-    <img 
-      src={item.image} 
-      alt={item.name} 
-      style={{ width: '100px', height: '100px', objectFit: 'cover', marginRight: '16px' }} 
-    />
+                <p style={{ color: "#e63946" }}>
+                  Total Amount: ${(item.price * item.quantity).toFixed(2)}
+                </p>
 
-    {/* Product Info */}
-    <div style={{ flex: 1 }}>
-      <h3>{item.name}</h3>
-      <p>Price: ₹{item.price}</p>
-      <p>Quantity: {item.quantity}</p>
-      <p>Total: ₹{item.totalPrice}</p>
-    </div>
-
-    {/* Remove Button */}
-    <button 
-     onClick={() => handleRemoveItem(item.id)}
-
-      // onClick={() => handleRemoveFromCart(item.id)} 
-      style={{ backgroundColor: 'red', color: 'white', border: 'none', padding: '8px 12px', cursor: 'pointer' }}
-    >
-      Remove
-    </button>
-  </div>
-))}
-
-{/* {cartItems.map((item) => (
-  <div key={item.id}>
-    <h3>{item.name}</h3>
-    <p>Price: ${item.price}</p>
-    <p>Quantity: {item.quantity}</p>
-    <p>Total: ${item.totalPrice}</p>
-  </div>
-))} */}
-
+                <button
+                  onClick={() => handleRemoveItem(item.id)}
+                  style={{
+                    padding: "10px",
+                    backgroundColor: "#e63946",
+                    color: "#fff",
+                    border: "none",
+                    cursor: "pointer",
+                    borderRadius: "5px",
+                  }}
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
           </div>
 
-          {/* Order Summary */}
+          {/* Right side - Order Summary */}
           <div
             style={{
               flex: 1,
@@ -220,13 +262,10 @@ const Cart = () => {
               overflowY: "auto",
             }}
           >
-            <h3 style={{ fontSize: "24px", marginBottom: "30px" }}>
-              Order Summary
-            </h3>
+            <h3 style={{ fontSize: "24px", marginBottom: "30px" }}>Order Summary</h3>
             <div style={{ marginBottom: "10px" }}>
               <p style={{ fontSize: "18px", margin: "20px 0" }}>
-                <strong>Items in Cart:</strong>{" "}
-                {cartItems.reduce((total, item) => total + item.quantity, 0)}
+                <strong>Items in Cart:</strong> {cartItems.reduce((total, item) => total + item.quantity, 0)}
               </p>
               <p style={{ fontSize: "18px", margin: "5px 0" }}>
                 <strong>Total Price:</strong> ${getTotalPrice()}
