@@ -18,6 +18,7 @@
   font-weight: 700;
   color: green;
   text-align: center;
-  margin-top: 150px;
+  margin-top: 40px;
+  margin-bottom: 90px;
   animation: fadeInUp 1s ease-out forwards; /* forwards ensures the animation stays in its final state */
 }
