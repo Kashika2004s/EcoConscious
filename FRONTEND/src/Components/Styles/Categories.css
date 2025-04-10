@@ -128,6 +128,21 @@
       height: 250px; /* Adjust height as needed */
       min-height: 250px;
     }
+
+    .congratulationsText {
+      font-size: 18px;
+      font-weight: 500;
+      color: #2e7d32;
+      margin: 0;
+      text-align: center;
+      line-height: 1.4;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%; /* takes full parent height */
+    }
+    
   
     .firstCategoryBox, .firstCategoryBox1, .secondCategoryBox {
       width: 100%; /* Ensure they are all full width */

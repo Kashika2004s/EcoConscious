@@ -11,6 +11,8 @@ const ProductProfile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isInWishlist, setIsInWishlist] = useState(false);
+  const handleAlternativeClick = () => setShowAlternative(true);
+  const closeAlternative = () => setShowAlternative(false);
   const [hoveredIcon, setHoveredIcon] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
@@ -231,11 +233,11 @@ const ProductProfile = () => {
           }}
         >
           <h1 style={{ margin: "0", padding: "0" }}>{product.name}</h1>
-          <p style={{ fontSize: "28px", color: "#e63946", margin: "0" }}>
+          <p style={{ fontSize: "28px", color: "#e63946", margin: "0", padding: "0" }}>
             Price: ${product.price}
           </p>
 
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div style={{ display: "flex", alignItems: "center", margin:"0", padding: "0" }}>
             <span style={{ color: "#ffcc00", marginRight: "15px", fontSize: "20px" }}>
               ★★★★★
             </span>
@@ -248,10 +250,10 @@ const ProductProfile = () => {
             {product.description}
           </p>
 
-          <p style={{ fontSize: "18px" }}>
+          <p style={{ margin:"0", padding: "0", fontSize: "18px" }}>
             <strong>Availability:</strong> {product.inStock ? "In stock" : "Out of stock"}
           </p>
-          <p style={{ fontSize: "18px" }}>
+          <p style={{ margin:"0", padding: "0", fontSize: "18px" }}>
             <strong>Product Type:</strong> {product.category}
           </p>
 
