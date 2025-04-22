@@ -2,7 +2,9 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
+const path = require("path");
 const db = require("./db"); 
+
 const errorHandler = require("./Middlewares/errorHandler");
 
 const authenticateToken = require("./Middlewares/tokenAuthentication");
@@ -15,9 +17,10 @@ const productsRouter = require("./Routes/products");
 const bestProductRouter = require("./Routes/bestProduct");
 const profileRouter = require("./Routes/profile");
 const wishlistRouter=require("./Routes/wishlist");
-const cartRouter=require("./Routes/cart");
 const deleteRouter=require("./Routes/delete");
-const editRouter=require("./Routes/edit");
+const cartRouter=require("./Routes/cart");
+const editRouter=require("./Routes/edit");zz
+const alternativeRoute=require("./Routes/alternatives");
 const searchRouter = require("./Routes/search");
 
 dotenv.config();
@@ -38,9 +41,10 @@ db.execute("SELECT 1")
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     app.use(express.static("public"));
-    app.use("/uploads", express.static("uploads"));
+    app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
     // ✅ Correct route setup
+
     app.use("/api/signup", signupRouter);
     app.use("/api/login", loginRouter);
     app.use("/verify", verifyRouter);
@@ -52,6 +56,7 @@ db.execute("SELECT 1")
     app.use("/api/cart", authenticateToken, cartRouter);
     app.use("/api/edit",authenticateToken,editRouter);
     app.use("/api/search", searchRouter); 
+    app.use("/api/alternatives",alternativeRoute);
 
     app.use("*", (req, res) => {
       res.status(404).json({ message: "❌ Route not found" });

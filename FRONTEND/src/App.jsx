@@ -13,6 +13,7 @@ import Bestproduct from "./Components/Bestproduct";
 import Cart from "./Components/Cart";
 import Edit from "./Components/Edit";
 import SearchResults from "./Components/SearchResults";
+import Alternative from "./Components/Alternative";
 function PrivateRoute({ element }) {
   const token = localStorage.getItem("token");
   console.log("PrivateRoute Token:", token); // Debugging
@@ -20,6 +21,7 @@ function PrivateRoute({ element }) {
   return token ? element : <Navigate to="/login" replace />;
 }
 
+// ✅ Redirect to /home if already logged in
 function AuthRedirect({ element }) {
   const token = localStorage.getItem("token");
   console.log("AuthRedirect Token:", token); // Debugging
@@ -43,12 +45,13 @@ function App() {
 }
 
 function AppContent() {
-  const location = useLocation(); // Get the current path
+  const location = useLocation();
 
   return (
     <>
       {/* Show Navbar only if not on login/signup pages */}
-      {location.pathname !== "/" && location.pathname !== "/signup" && <Navbar />}
+      {!["/", "/signup", "/login"].includes(location.pathname) && <Navbar />}
+
 
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
@@ -63,10 +66,13 @@ function AppContent() {
         <Route path="/bestproduct" element={<PrivateRoute element={<Bestproduct />} />} />
         <Route path="/search/:term" element={<SearchResults />} />
         <Route path="/edit" element={<PrivateRoute element={<Edit />} />} />
+        <Route path="/alternatives/:category/:id" element={<Alternative />} />
+
       </Routes>
 
       {/* Show Footer only if not on login/signup pages */}
-      {location.pathname !== "/" && location.pathname !== "/signup" && <Footer />}
+      {!["/", "/signup", "/login"].includes(location.pathname) && <Footer />}
+
     </>
   );
 }

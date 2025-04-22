@@ -20,7 +20,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// ✅ Fetch products by category
+// Fetch products by category
 router.get("/category/:category", async (req, res) => {
   const { category } = req.params;
 
@@ -37,12 +37,12 @@ router.get("/category/:category", async (req, res) => {
     console.log(`Products fetched for category: ${category}`);
     res.status(200).json(products);
   } catch (error) {
-    console.error(`❌ Error fetching category ${category}:`, error);
+    console.error(`Error fetching category ${category}:`, error);
     res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 });
 
-// ✅ Fetch a single product by ID (Fixed Route!)
+// Fetch a single product by ID (Fixed Route!)
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
 
@@ -52,15 +52,16 @@ router.get("/:id", async (req, res) => {
     const [product] = await db.execute("SELECT * FROM products WHERE id = ?", [id]);
 
     if (product.length === 0) {
-      console.log(`❌ Product with ID ${id} not found!`);
+      console.log(`Product with ID ${id} not found!`);
       return res.status(404).json({ message: "Product not found" });
     }
 
-    console.log(`✅ Product fetched with ID: ${id}`);
+    console.log(`Product fetched with ID: ${id}`);
     res.status(200).json(product[0]);
   } catch (error) {
-    console.error(`❌ Error fetching product ID ${id}:`, error);
+    console.error(`Error fetching product ID ${id}:`, error);
     res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 });
 module.exports = router;
+

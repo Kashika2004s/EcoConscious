@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"; 
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
@@ -7,15 +7,14 @@ const Cart = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Define heading styles
   const styles = {
     heading: {
-      fontSize: '32px',
-      textAlign: 'center',
-      marginTop: '5px',
-      marginBottom: '50px',
-      color: '#333',
-      width: '100%',
+      fontSize: "32px",
+      textAlign: "center",
+      marginTop: "5px",
+      marginBottom: "50px",
+      color: "#333",
+      width: "100%",
     },
   };
 
@@ -37,6 +36,7 @@ const Cart = () => {
               ...item,
               price: item.price || 0,
               quantity: item.quantity || 1,
+              productId: item.productId,
             }))
           );
         } else {
@@ -52,45 +52,11 @@ const Cart = () => {
     fetchCartItems();
   }, []);
 
-  // Handle quantity change
-  const handleQuantityChange = async (productId, newQuantity) => {
-    if (newQuantity < 1 || newQuantity > 20) {
-      alert("Quantity must be between 1 and 20");
-      return;
-    }
-
-    try {
-      const response = await fetch('http://localhost:3000/api/cart/update', {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ productId, quantity: newQuantity }),
-      });
-
-      const data = await response.json();
-      if (response.ok) {
-        setCartItems(
-          cartItems.map((item) =>
-            item.productId === productId
-              ? { ...item, quantity: newQuantity }
-              : item
-          )
-        );
-      } else {
-        alert(data.message || "Failed to update quantity");
-      }
-    } catch (error) {
-      console.error("Error updating quantity:", error);
-    }
-  };
-
   // Handle remove item
-  const handleRemoveItem = async (productId) => {
+  const handleRemoveItem = async (itemId) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/cart/remove/${productId}`,
+        `http://localhost:3000/api/cart/remove/${itemId}`, // ✅ Correct port
         {
           method: "DELETE",
           headers: {
@@ -99,10 +65,10 @@ const Cart = () => {
           },
         }
       );
-
+  
       const data = await response.json();
       if (response.ok) {
-        setCartItems(cartItems.filter((item) => item.productId !== productId));
+        setCartItems(cartItems.filter((item) => item.id !== itemId));
       } else {
         setError(data.message || "Failed to remove item from cart");
       }
@@ -110,7 +76,7 @@ const Cart = () => {
       setError("Error removing item from cart");
     }
   };
-
+  
   const handleCheckout = async () => {
     try {
       const response = await fetch(
@@ -123,22 +89,29 @@ const Cart = () => {
           },
         }
       );
+      const handleQuantityChange = (productId, newQuantity) => {
+        setCartItems((prevItems) =>
+          prevItems.map((item) =>
+            item.productId === productId
+              ? { ...item, quantity: newQuantity }
+              : item
+          )
+        );
+      };
+      
 
       const data = await response.json();
       if (response.ok) {
         alert("Order placed successfully!");
         navigate(`/order/${data.order.id}`);
       } else {
-        console.error("Error response:", data);
         alert(data.message || "Failed to place order");
       }
     } catch (error) {
-      console.error("Error placing order:", error);
       alert("Error placing order. Please try again.");
     }
   };
 
-  // Calculate total price
   const getTotalPrice = () => {
     return cartItems
       .reduce((total, item) => {
@@ -259,7 +232,7 @@ const Cart = () => {
                 </p>
 
                 <button
-                  onClick={() => handleRemoveItem(item.productId)}
+                  onClick={() => handleRemoveItem(item.id)}
                   style={{
                     padding: "10px",
                     backgroundColor: "#e63946",
