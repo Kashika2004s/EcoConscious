@@ -75,6 +75,7 @@ const ProfileDetails = () => {
       justifyContent: "center",
       minHeight: "100vh",
       padding: "20px",
+      marginTop:"50px"
     },
     container: {
       width: "100%",

@@ -86,6 +86,7 @@ const EditProfile = () => {
       justifyContent: "center",
       minHeight: "100vh",
       padding: "20px",
+      marginTop:"80px"
     },
     container: {
       width: "100%",
@@ -102,6 +103,7 @@ const EditProfile = () => {
       marginBottom: "20px",
     },
     heading: {
+      marginTop:"20px",
       fontSize: "24px",
       color: "#333",
     },
