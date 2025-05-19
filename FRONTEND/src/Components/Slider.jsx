@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Eco_Tote from "../assets/Eco_Tote";
+import Eco_Tote from "../assets/Eco_Tote.png";
 import perfume from "../assets/perfume.png";
 import shoe from "../assets/shoe_image.png";
 
