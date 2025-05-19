@@ -62,6 +62,11 @@ db.execute("SELECT 1")
     app.use("/api/alternatives",alternativeRoute);
     app.use("/api/order-history",authenticateToken,orderhistoryRoutes);
     app.use("/api/feedback", authenticateToken, feedbackRouter);
+    // Add this right after your middleware setup but before app.use("*", ...)
+app.get("/", (req, res) => {
+  res.send("Welcome to EcoConscious backend!");
+});
+
     app.use("*", (req, res) => {
       res.status(404).json({ message: "❌ Route not found" });
     });
