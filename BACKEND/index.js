@@ -34,11 +34,16 @@ db.execute("SELECT 1")
   .then(() => {
     console.log("✅ MySQL Database Connected!");
 
-    app.use(cors({ 
-      origin: "http://localhost:5173" || process.env.FRONTEND_URL,
-      methods: ["GET", "POST", "PUT", "DELETE"], 
-      credentials: true 
+    app.use(cors({
+      origin: [
+        "http://localhost:5173",
+        "https://eco-conscious-dmvt.vercel.app",
+        "https://eco-conscious-xup7.vercel.app"
+      ],
+      methods: ["GET", "POST", "PUT", "DELETE"],
+      credentials: true
     }));
+    
     app.use(morgan("dev"));
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
