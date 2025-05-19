@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Eco_Tote from "../public/Eco _Tote.png";
-import perfume from "../public/perfume.png";
-import shoe from "../public/shoe_image.png";
+import EcoTote from "../assets/eco_tote.png";
+import perfume from "../assets/perfume.png";
+import shoe from "../assets/shoe_image.png";
 
 const Slider = () => {
   const navigate = useNavigate();
