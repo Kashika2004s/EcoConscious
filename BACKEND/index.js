@@ -34,15 +34,23 @@ db.execute("SELECT 1")
   .then(() => {
     console.log("✅ MySQL Database Connected!");
 
+    const allowedOrigins = [
+      "http://localhost:5173",
+      "https://eco-conscious-xup7.vercel.app"
+    ];
+    
     app.use(cors({
-      origin: [
-        "http://localhost:5173",
-        "https://eco-conscious-dmvt.vercel.app",
-        "https://eco-conscious-xup7.vercel.app"
-      ],
+      origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error("❌ Not allowed by CORS"));
+        }
+      },
       methods: ["GET", "POST", "PUT", "DELETE"],
       credentials: true
     }));
+    
     
     app.use(morgan("dev"));
     app.use(express.json());
