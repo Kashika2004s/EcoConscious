@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import EnvironmentCriteria from "./EnvironmentCriteria";
+
 import Alternative from "./Alternative";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 // import Footer from "./Footer";
 
 const ProductProfile = () => {
+  const [reviews, setReviews] = useState([]);
+  const [showReviews, setShowReviews] = useState(false);
+
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -16,7 +20,35 @@ const ProductProfile = () => {
   const [hoveredIcon, setHoveredIcon] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
+  const fetchReviews = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Please log in to see reviews.");
+      return;
+    }
 
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/feedback/product/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+      if (response.ok) {
+        setReviews(data);
+        setShowReviews(true);
+      } else {
+        alert(data.message || "Failed to fetch reviews");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error fetching reviews");
+    }
+  };
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -24,19 +56,24 @@ const ProductProfile = () => {
       setError("You need to be logged in to view product details.");
       return;
     }
+    
 
     const fetchProductAndWishlist = async () => {
       try {
         // Fetch product details
-        const productRes = await fetch(`http://localhost:3000/api/products/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
+        const productRes = await fetch(
+          `http://localhost:3000/api/products/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         const productData = await productRes.json();
-        if (!productRes.ok) throw new Error(productData.message || "Failed to fetch product");
+        if (!productRes.ok)
+          throw new Error(productData.message || "Failed to fetch product");
 
         setProduct(productData);
 
@@ -51,7 +88,9 @@ const ProductProfile = () => {
         const wishlistData = await wishlistRes.json();
         if (!wishlistRes.ok) throw new Error("Failed to fetch wishlist");
 
-        const inWishlist = wishlistData.some((item) => item.id === productData.id);
+        const inWishlist = wishlistData.some(
+          (item) => item.id === productData.id
+        );
         setIsInWishlist(inWishlist);
       } catch (err) {
         setError(err.message);
@@ -233,27 +272,84 @@ const ProductProfile = () => {
           }}
         >
           <h1 style={{ margin: "0", padding: "0" }}>{product.name}</h1>
-          <p style={{ fontSize: "28px", color: "#e63946", margin: "0", padding: "0" }}>
+          <p
+            style={{
+              fontSize: "28px",
+              color: "#e63946",
+              margin: "0",
+              padding: "0",
+            }}
+          >
             Price: ${product.price}
           </p>
 
-          <div style={{ display: "flex", alignItems: "center", margin:"0", padding: "0" }}>
-            <span style={{ color: "#ffcc00", marginRight: "15px", fontSize: "20px" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              margin: "0",
+              padding: "0",
+            }}
+          >
+            <span
+              style={{
+                color: "#ffcc00",
+                marginRight: "15px",
+                fontSize: "20px",
+              }}
+            >
               ★★★★★
             </span>
-            <a href="#reviews" style={{ color: "#333", fontSize: "18px" }}>
-              3 reviews
-            </a>
+            <button
+              style={{
+                color: "#333",
+                fontSize: "18px",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                padding: 0,
+              }}
+              onClick={fetchReviews}
+            >
+              {product.reviewCount || "3"} reviews
+            </button>
+            {showReviews && (
+              <div id="reviews" style={{ marginTop: "40px" }}>
+                <h2>Reviews</h2>
+                {reviews.length === 0 ? (
+                  <p>No reviews yet for this product.</p>
+                ) : (
+                  reviews.map((review) => (
+                    <div
+                      key={review._id}
+                      style={{
+                        borderBottom: "1px solid #ccc",
+                        padding: "10px 0",
+                      }}
+                    >
+                      <strong>{review.userName || "Anonymous"}</strong>{" "}
+                      {/* Assuming your review has userName */}
+                      <p>{review.comment}</p>
+                      <small>Rating: {review.rating || "N/A"}</small>
+                    </div>
+                  ))
+                )}
+                <button onClick={() => setShowReviews(false)}>
+                  Close Reviews
+                </button>
+              </div>
+            )}
           </div>
 
           <p style={{ color: "#555", lineHeight: "1.8", fontSize: "18px" }}>
             {product.description}
           </p>
 
-          <p style={{ margin:"0", padding: "0", fontSize: "18px" }}>
-            <strong>Availability:</strong> {product.inStock ? "In stock" : "Out of stock"}
+          <p style={{ margin: "0", padding: "0", fontSize: "18px" }}>
+            <strong>Availability:</strong>{" "}
+            {product.inStock ? "In stock" : "Out of stock"}
           </p>
-          <p style={{ margin:"0", padding: "0", fontSize: "18px" }}>
+          <p style={{ margin: "0", padding: "0", fontSize: "18px" }}>
             <strong>Product Type:</strong> {product.category}
           </p>
 
@@ -326,7 +422,9 @@ const ProductProfile = () => {
                   marginRight: "20px",
                   fontSize: "24px",
                   color:
-                    hoveredIcon === "heart" || isInWishlist ? "#ff0000" : "#ccc",
+                    hoveredIcon === "heart" || isInWishlist
+                      ? "#ff0000"
+                      : "#ccc",
                 }}
               ></i>
               {isInWishlist ? "IN WISHLIST" : "ADD TO WISHLIST"}
@@ -346,14 +444,15 @@ const ProductProfile = () => {
               }}
               onClick={buyNow}
             >
-              <i className="fas fa-credit-card" style={{ marginRight: "10px" }}></i>
+              <i
+                className="fas fa-credit-card"
+                style={{ marginRight: "10px" }}
+              ></i>
               Buy Now
             </button>
             <Alternative productId={product.id} category={product.category} />
           </div>
-          
         </div>
-        
 
         {/* Right Sticky Panel */}
         <div
@@ -379,7 +478,6 @@ const ProductProfile = () => {
               durability: product.durability,
             }}
           />
-          
         </div>
       </div>
       {/* <Footer /> */}

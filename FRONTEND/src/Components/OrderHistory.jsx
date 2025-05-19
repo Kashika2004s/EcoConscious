@@ -130,18 +130,27 @@ const FeedbackForm = ({ orderId, onSubmit }) => {
   const [comments, setComments] = useState('');
   const [photo, setPhoto] = useState(null);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const token = localStorage.getItem('token'); // get token from localStorage
 
     const formData = new FormData();
     formData.append('orderId', orderId);
     formData.append('comments', comments);
-    formData.append('photo', photo); // photo should be the File object
+    if (photo) {
+      formData.append('photo', photo);
+    }
 
     try {
       const response = await fetch('http://localhost:3000/api/feedback', {
         method: 'POST',
         body: formData,
+        credentials: 'include', // keep if backend uses cookies too
+        headers: {
+          Authorization: `Bearer ${token}`, // add Authorization header with token
+          // Don't set Content-Type manually when sending FormData
+        },
       });
 
       if (!response.ok) {
@@ -149,13 +158,11 @@ const FeedbackForm = ({ orderId, onSubmit }) => {
       }
 
       const data = await response.json();
-      alert(data.message);
-      setTimeout(() => {
-        onSubmit(); 
-      }, 50);
+      console.log('Feedback submitted:', data);
+
+      onSubmit(); // call parent callback after successful submission
     } catch (error) {
       console.error(error);
-      alert('An error occurred: ' + error.message);
     }
   };
 
@@ -184,7 +191,7 @@ const OrderHistory = () => {
   const [orderHistory, setOrderHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showFeedback, setShowFeedback] = useState(false); 
+  const [showFeedback, setShowFeedback] = useState(false);
 
   useEffect(() => {
     const fetchOrderHistory = async () => {
@@ -217,7 +224,7 @@ const OrderHistory = () => {
   }, []);
 
   const toggleFeedbackForm = () => {
-    setShowFeedback((prev) => !prev); // Toggle feedback form visibility
+    setShowFeedback((prev) => !prev);
   };
 
   if (loading) return <div>Loading...</div>;
@@ -247,7 +254,7 @@ const OrderHistory = () => {
             </div>
             <div>
               {order.items.map((item) => {
-                const product = item.productId || {}; // Fallback to an empty object
+                const product = item.productId || {};
                 return (
                   <div key={product.id || item.id} style={styles.itemContainer}>
                     <div style={styles.imageContainer}>
@@ -284,7 +291,7 @@ const OrderHistory = () => {
               <FeedbackForm
                 orderId={order.id}
                 onSubmit={() => {
-                  setShowFeedback(false); // Hide the feedback form after submitting
+                  setShowFeedback(false);
                   console.log('Feedback submitted for order', order.id);
                 }}
               />

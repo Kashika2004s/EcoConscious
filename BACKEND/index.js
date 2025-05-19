@@ -19,6 +19,7 @@ const profileRouter = require("./Routes/profile");
 const wishlistRouter=require("./Routes/wishlist");
 const deleteRouter=require("./Routes/delete");
 const cartRouter=require("./Routes/cart");
+const feedbackRouter = require("./Routes/feedback");
 const editRouter=require("./Routes/edit");
 const alternativeRoute=require("./Routes/alternatives");
 const searchRouter = require("./Routes/search");
@@ -60,7 +61,7 @@ db.execute("SELECT 1")
     app.use("/api/search", searchRouter); 
     app.use("/api/alternatives",alternativeRoute);
     app.use("/api/order-history",authenticateToken,orderhistoryRoutes);
-
+    app.use("/api/feedback", authenticateToken, feedbackRouter);
     app.use("*", (req, res) => {
       res.status(404).json({ message: "❌ Route not found" });
     });
