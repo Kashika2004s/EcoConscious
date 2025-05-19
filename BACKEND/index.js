@@ -22,7 +22,8 @@ const cartRouter=require("./Routes/cart");
 const editRouter=require("./Routes/edit");
 const alternativeRoute=require("./Routes/alternatives");
 const searchRouter = require("./Routes/search");
-
+const orderRoutes = require("./Routes/order");
+const orderhistoryRoutes = require("./Routes/orderhistory");
 dotenv.config();
 
 const app = express();
@@ -55,8 +56,10 @@ db.execute("SELECT 1")
     app.use("/api/wishlist", authenticateToken, wishlistRouter);
     app.use("/api/cart", authenticateToken, cartRouter);
     app.use("/api/edit",authenticateToken,editRouter);
+    app.use("/api/order", authenticateToken, orderRoutes); 
     app.use("/api/search", searchRouter); 
     app.use("/api/alternatives",alternativeRoute);
+    app.use("/api/order-history",authenticateToken,orderhistoryRoutes);
 
     app.use("*", (req, res) => {
       res.status(404).json({ message: "❌ Route not found" });

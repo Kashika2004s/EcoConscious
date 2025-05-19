@@ -103,7 +103,7 @@ const Cart = () => {
       const data = await response.json();
       if (response.ok) {
         alert("Order placed successfully!");
-        navigate(`/order/${data.order.id}`);
+        navigate(`/order/${data.order._id}`);
       } else {
         alert(data.message || "Failed to place order");
       }

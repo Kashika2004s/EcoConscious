@@ -11,8 +11,11 @@ import Navbar from "./Components/Navbar";
 import Wishlist from "./Components/Wishlist";
 import Bestproduct from "./Components/Bestproduct";
 import Cart from "./Components/Cart";
+import Order from './Components/Order';
+import OrderHistory from './Components/OrderHistory';
 import Edit from "./Components/Edit";
 import SearchResults from "./Components/SearchResults";
+
 import Alternative from "./Components/Alternative";
 function PrivateRoute({ element }) {
   const token = localStorage.getItem("token");
@@ -62,6 +65,8 @@ function AppContent() {
         <Route path="/products/:category/:id" element={<PrivateRoute element={<ProductProfile />} />} />
         <Route path="/wishlist" element={<PrivateRoute element={<Wishlist />} />} />
         <Route path="/cart" element={<PrivateRoute element={<Cart />} />} />
+        <Route path="/order/:orderId" element={<Order />} />
+        <Route path="/order-history"  element={<OrderHistory /> }/>
         <Route path="/profile" element={<PrivateRoute element={<ProfileDetails />} />} />
         <Route path="/bestproduct" element={<PrivateRoute element={<Bestproduct />} />} />
         <Route path="/search/:term" element={<SearchResults />} />
