@@ -143,7 +143,7 @@ const FeedbackForm = ({ orderId, onSubmit }) => {
     }
 
     try {
-      const response = await fetch('http://localhost:3000/api/feedback', {
+      const response = await fetch('https://ecoconsciousback.onrender.com/api/feedback', {
         method: 'POST',
         body: formData,
         credentials: 'include', // keep if backend uses cookies too
@@ -196,7 +196,7 @@ const OrderHistory = () => {
   useEffect(() => {
     const fetchOrderHistory = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/order-history', {
+        const response = await fetch('https://ecoconsciousback.onrender.com/api/order-history', {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,

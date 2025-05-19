@@ -80,7 +80,7 @@ const Order = () => {
     const fetchOrder = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3000/api/order/${orderId}`,
+          `https://ecoconsciousback.onrender.com/api/order/${orderId}`,
           {
             method: "GET",
             headers: {

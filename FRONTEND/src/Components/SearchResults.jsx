@@ -19,7 +19,7 @@ const SearchResults = () => {
         const token = localStorage.getItem("token");
 
         const response = await axios.get(
-          `http://localhost:3000/api/search/${term}`,
+          `https://ecoconsciousback.onrender.com/api/search/${term}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

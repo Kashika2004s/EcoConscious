@@ -35,7 +35,7 @@ db.execute("SELECT 1")
     console.log("✅ MySQL Database Connected!");
 
     app.use(cors({ 
-      origin: "http://localhost:5173",
+      origin: "http://localhost:5173" || process.env.FRONTEND_URL,
       methods: ["GET", "POST", "PUT", "DELETE"], 
       credentials: true 
     }));

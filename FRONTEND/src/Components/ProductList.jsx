@@ -26,7 +26,7 @@ const ProductList = () => {
         const token = localStorage.getItem("token");
         if (!token) throw new Error("Unauthorized. Please log in.");
 
-        const response = await axios.get("http://localhost:3000/api/products", {
+        const response = await axios.get("https://ecoconsciousback.onrender.com/api/products", {
           headers: { Authorization: `Bearer ${token}` },
         });
 

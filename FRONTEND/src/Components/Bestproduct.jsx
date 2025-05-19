@@ -19,7 +19,7 @@ const BestProducts = () => {
     const fetchBestProducts = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:3000/api/bestproduct", {
+        const response = await axios.get("https://ecoconsciousback.onrender.com/api/bestproduct", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

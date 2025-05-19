@@ -22,7 +22,7 @@ const Cart = () => {
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/cart", {
+        const response = await fetch("https://ecoconsciousback.onrender.com/api/cart", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -56,7 +56,7 @@ const Cart = () => {
   const handleRemoveItem = async (itemId) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/cart/remove/${itemId}`, // ✅ Correct port
+        `https://ecoconsciousback.onrender.com/api/cart/remove/${itemId}`, // ✅ Correct port
         {
           method: "DELETE",
           headers: {
@@ -80,7 +80,7 @@ const Cart = () => {
   const handleCheckout = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/order/place-order",
+        "https://ecoconsciousback.onrender.com/api/order/place-order",
         {
           method: "POST",
           headers: {

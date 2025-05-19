@@ -29,7 +29,7 @@ const ProductProfile = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/feedback/product/${id}`,
+        `https://ecoconsciousback.onrender.com/api/feedback/product/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -62,7 +62,7 @@ const ProductProfile = () => {
       try {
         // Fetch product details
         const productRes = await fetch(
-          `http://localhost:3000/api/products/${id}`,
+          `https://ecoconsciousback.onrender.com/api/products/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -78,7 +78,7 @@ const ProductProfile = () => {
         setProduct(productData);
 
         // Fetch wishlist
-        const wishlistRes = await fetch("http://localhost:3000/api/wishlist", {
+        const wishlistRes = await fetch("https://ecoconsciousback.onrender.com/api/wishlist", {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -120,7 +120,7 @@ const ProductProfile = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:3000/api/wishlist/add", {
+      const response = await fetch("https://ecoconsciousback.onrender.com/api/wishlist/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -150,7 +150,7 @@ const ProductProfile = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/api/order/buy-now", {
+      const response = await fetch("https://ecoconsciousback.onrender.com/api/order/buy-now", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -190,7 +190,7 @@ const ProductProfile = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/api/cart/add", {
+      const response = await fetch("https://ecoconsciousback.onrender.com/api/cart/add", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

@@ -17,7 +17,7 @@ const ProfileDetails = () => {
       }
 
       try {
-        const response = await fetch("http://localhost:3000/api/profile", {
+        const response = await fetch("https://ecoconsciousback.onrender.com/api/profile", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -43,7 +43,7 @@ const ProfileDetails = () => {
 
   const handleDelete = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/delete", {
+      const response = await fetch("https://ecoconsciousback.onrender.com/api/delete", {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
