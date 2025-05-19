@@ -18,7 +18,7 @@ const Navbar = () => {
   const allSuggestions = [
     "beauty", "footwear", "bags", "clothing",
     "lipstick", "heels", "sneakers", "handbags", "kurta", "saree", "t-shirt",
-    "eco-friendly", "cream", "shampoo"
+    "eco-friendly", "cream", "shampoo","perfume",
   ];
   
 

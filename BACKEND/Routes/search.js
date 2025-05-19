@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../db"); // Assuming you created a db connection file
+const db = require("../db"); 
 const authenticateToken = require("../Middlewares/tokenAuthentication");
 
 router.get("/:term", authenticateToken, async (req, res) => {

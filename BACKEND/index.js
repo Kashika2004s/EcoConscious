@@ -19,7 +19,7 @@ const profileRouter = require("./Routes/profile");
 const wishlistRouter=require("./Routes/wishlist");
 const deleteRouter=require("./Routes/delete");
 const cartRouter=require("./Routes/cart");
-const editRouter=require("./Routes/edit");zz
+const editRouter=require("./Routes/edit");
 const alternativeRoute=require("./Routes/alternatives");
 const searchRouter = require("./Routes/search");
 
