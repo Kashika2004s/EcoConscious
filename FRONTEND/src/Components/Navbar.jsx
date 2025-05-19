@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-// import logo from "../public/logo.png";
+import logo from "../assets/logo.png";
 
 import { FaRegUser, FaRegHeart, FaSearch } from "react-icons/fa";
 import { FiShoppingBag } from "react-icons/fi";
@@ -211,9 +211,9 @@ const Navbar = () => {
     <nav style={styles.navbar}>
       {/* Logo */}
       <div style={styles.logoContainer} onClick={navigateToHome}>
-      <img src="/logo.png" alt="Logo" style={styles.logo}/>
+      {/* <img src="/logo.png" alt="Logo" style={styles.logo}/> */}
 
-        {/* <img src={logo} alt="Logo" style={styles.logo} /> */}
+        <img src={logo} alt="Logo" style={styles.logo} />
         <span style={styles.heading}>Eco-Conscious</span>
       </div>
 
