@@ -34,10 +34,7 @@ db.execute("SELECT 1")
   .then(() => {
     console.log("✅ MySQL Database Connected!");
 
-    const allowedOrigins = [
-      "http://localhost:5173",
-      "https://eco-conscious-xup7.vercel.app"
-    ];
+    
     
     const allowedOrigins = [
       "http://localhost:5173",
