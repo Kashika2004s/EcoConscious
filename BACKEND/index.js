@@ -39,17 +39,25 @@ db.execute("SELECT 1")
       "https://eco-conscious-xup7.vercel.app"
     ];
     
+    const allowedOrigins = [
+      "http://localhost:5173",
+      "https://eco-conscious-xup7.vercel.app"
+    ];
+    
     app.use(cors({
       origin: function (origin, callback) {
+        console.log("🌐 Request Origin:", origin);
         if (!origin || allowedOrigins.includes(origin)) {
           callback(null, true);
         } else {
+          console.error("❌ CORS blocked origin:", origin);
           callback(new Error("❌ Not allowed by CORS"));
         }
       },
       methods: ["GET", "POST", "PUT", "DELETE"],
       credentials: true
     }));
+    
     
     
     app.use(morgan("dev"));
