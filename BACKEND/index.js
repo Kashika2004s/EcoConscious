@@ -39,7 +39,7 @@ db.execute("SELECT 1")
     const allowedOrigins = [
   "http://localhost:5173",
   "https://eco-conscious-4cca.vercel.app",
-  "https://eco-conscious-n41e-g96k4oxb3-kashikas-projects-951a6c1c.vercel.app"
+  "https://eco-conscious-n41e-dm4uo2x94-kashikas-projects-951a6c1c.vercel.app"
 ];
 
     const corsOptions = {
