@@ -10,7 +10,7 @@ const SignUp_Login = () => {
     const token = localStorage.getItem("token");
     if (!token) return; // Avoid unnecessary API calls if no token
   
-    fetch("https://ecoconsciousback.onrender.com/api/profile", {
+    fetch("https://ecoconscious.onrender.com/api/profile", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -34,7 +34,7 @@ const SignUp_Login = () => {
     const password = document.getElementById("password").value;
   
     try {
-      const response = await fetch("https://ecoconsciousback.onrender.com/api/login", {
+      const response = await fetch("https://ecoconscious.onrender.com/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

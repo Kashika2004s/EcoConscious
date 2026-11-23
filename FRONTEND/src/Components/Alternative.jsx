@@ -17,7 +17,7 @@ const Alternative = ({ productId, category }) => {
         setLoading(true);
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          `https://ecoconsciousback.onrender.com/api/alternatives/${category}/${productId}`,
+          `https://ecoconscious.onrender.com/api/alternatives/${category}/${productId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }

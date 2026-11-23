@@ -110,7 +110,7 @@ const Wishlist = () => {
       }
 
       try {
-        const response = await fetch("https://ecoconsciousback.onrender.com/api/wishlist", {
+        const response = await fetch("https://ecoconscious.onrender.com/api/wishlist", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -145,7 +145,7 @@ const Wishlist = () => {
     }
 
     try {
-      const response = await fetch("https://ecoconsciousback.onrender.com/api/cart/add", {
+      const response = await fetch("https://ecoconscious.onrender.com/api/cart/add", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -183,7 +183,7 @@ const Wishlist = () => {
 
     try {
       const response = await fetch(
-        `https://ecoconsciousback.onrender.com/api/wishlist/remove/${productId}`,
+        `https://ecoconscious.onrender.com/api/wishlist/remove/${productId}`,
         {
           method: "DELETE",
           headers: {

@@ -27,7 +27,7 @@ const EditProfile = () => {
       }
 
       try {
-        const response = await fetch("https://ecoconsciousback.onrender.com/api/profile", {
+        const response = await fetch("https://ecoconscious.onrender.com/api/profile", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -56,7 +56,7 @@ const EditProfile = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("https://ecoconsciousback.onrender.com/api/edit", {
+      const response = await fetch("https://ecoconscious.onrender.com/api/edit", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
