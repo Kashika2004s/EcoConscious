@@ -14,7 +14,7 @@ router.get("/verify", async (req, res) => {
       token,
     ]);
 
-    res.redirect(`${process.env.BASE_URL || "http://localhost:3000"}/login`);
+    res.redirect(`${process.env.BASE_URL || "https://ecoconscious.onrender.com"}/login`);
   } catch (error) {
     console.error("Verification Error:", error);
     res.status(500).json({ message: "Internal Server Error" });

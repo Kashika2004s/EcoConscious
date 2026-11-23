@@ -10,7 +10,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
-const BASE_URL = process.env.BASE_URL || "http://localhost:3000";
+const BASE_URL = process.env.BASE_URL || "https://ecoconscious.onrender.com";
 
 // Email transporter config
 const transporter = nodemailer.createTransport({
