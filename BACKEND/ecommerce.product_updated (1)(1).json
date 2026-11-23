@@ -1,0 +1,962 @@
+[
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ebe"
+    },
+    "name": "Radiant Glow Face Cream",
+    "description": "Hydrating face cream infused with natural ingredients to provide a radiant glow and moisture lock. Suitable for all skin types.",
+    "price": 45.99,
+    "category": "Beauty Products",
+    "image": "https://img.freepik.com/premium-photo/cosmetic-tube-packaging-mockup-blank-cream-tube-mockup-skincare-tube-mockup-green-cosmetic-tube_1037362-1578.jpg",
+    "inStock": true,
+    "carbonFootprint": 3.5,
+    "materialSourcing": "good",
+    "recyclability": 80,
+    "waterUsage": "moderate",
+    "energyEfficiency": "high",
+    "biodegradability": 95,
+    "durability": "1 year",
+    "ecoScore": 60.2,
+    "productType": "cream"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ebf"
+    },
+    "name": "Hydra Boost Cream",
+    "description": "Lightweight, non-greasy face moisturizer providing deep hydration with hyaluronic acid and botanical extracts.",
+    "price": 5.5,
+    "category": "Beauty Products",
+    "image": "https://th.bing.com/th/id/OIP._koZE0MPjV-z4ESiTN3drgHaEJ?w=626&h=351&rs=1&pid=ImgDetMain",
+    "inStock": true,
+    "carbonFootprint": 2,
+    "materialSourcing": "best",
+    "recyclability": 85,
+    "waterUsage": "low",
+    "energyEfficiency": "moderate",
+    "biodegradability": 90,
+    "durability": "6 months",
+    "ecoScore": 68.4,
+    "productType": "cream"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ec0"
+    },
+    "name": "EcoFresh Daily Face Cream",
+    "description": "Eco-friendly face cream for everyday hydration, featuring green tea and aloe vera for natural soothing effects.",
+    "price": 52,
+    "category": "Beauty Products",
+    "image": "https://www.nakinskincare.com/cdn/shop/articles/facebook_2048x1460.jpg?v=1591776249",
+    "inStock": false,
+    "carbonFootprint": 5,
+    "materialSourcing": "better",
+    "recyclability": 92,
+    "waterUsage": "high",
+    "energyEfficiency": "high",
+    "biodegradability": 88,
+    "durability": "10 months",
+    "ecoScore": 63.53,
+    "productType": "cream"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ec1"
+    },
+    "name": "EcoShine Shampoo",
+    "description": "A nourishing shampoo enriched with natural oils to hydrate and restore shine to dry and damaged hair.",
+    "price": 22.99,
+    "category": "Beauty Products",
+    "image": "https://img.freepik.com/premium-photo/skin-care-bottle-mockup_939196-198.jpg",
+    "inStock": true,
+    "carbonFootprint": 2.5,
+    "materialSourcing": "good",
+    "recyclability": 80,
+    "waterUsage": "moderate",
+    "energyEfficiency": "high",
+    "biodegradability": 95,
+    "durability": "1 year",
+    "ecoScore": 60,
+    "productType": "shampoo"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ec2"
+    },
+    "name": "Pure Herbal Shampoo",
+    "description": "Formulated with organic herbs and plant extracts, this shampoo is perfect for sensitive scalps and strengthening hair from root to tip.",
+    "price": 18.5,
+    "category": "Beauty Products",
+    "image": "https://th.bing.com/th/id/OIP.RFLr2jnyzxFsPBhESjV35AHaHa?rs=1&pid=ImgDetMain",
+    "inStock": true,
+    "carbonFootprint": 5.5,
+    "materialSourcing": "better",
+    "recyclability": 90,
+    "waterUsage": "low",
+    "energyEfficiency": "moderate",
+    "biodegradability": 92,
+    "durability": "2 years",
+    "ecoScore": 69.3,
+    "productType": "shampoo"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ec3"
+    },
+    "name": "Repair Shampoo",
+    "description": "A deep repair shampoo that rejuvenates hair with essential oils and antioxidants, leaving it smooth and vibrant.",
+    "price": 28.75,
+    "category": "Beauty Products",
+    "image": "https://pics.craiyon.com/2023-10-11/22911eefff7c4c1190ce8be84e9dad12.webp",
+    "inStock": false,
+    "carbonFootprint": 6.8,
+    "materialSourcing": "best",
+    "recyclability": 85,
+    "waterUsage": "high",
+    "energyEfficiency": "low",
+    "biodegradability": 98,
+    "durability": "18 months",
+    "ecoScore": 65.16,
+    "productType": "shampoo"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ec4"
+    },
+    "name": "EcoLuxe Matte Lipstick",
+    "description": "A long-lasting, matte finish lipstick made from organic ingredients, offering rich color while moisturizing your lips.",
+    "price": 19.99,
+    "category": "Beauty Products",
+    "image": "https://th.bing.com/th/id/OIP.p0SALeW7FPfMNNqCgQG3BgHaHa?rs=1&pid=ImgDetMain",
+    "inStock": true,
+    "carbonFootprint": 10.5,
+    "materialSourcing": "best",
+    "recyclability": 90,
+    "waterUsage": "low",
+    "energyEfficiency": "high",
+    "biodegradability": 80,
+    "durability": "1 year",
+    "ecoScore": 78.1,
+    "productType": "lipstick"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ec5"
+    },
+    "name": "Herbal Rose Lipstick",
+    "description": "A soothing lipstick infused with rose extract, providing a smooth finish and a natural shine.",
+    "price": 15.99,
+    "category": "Beauty Products",
+    "image": "https://th.bing.com/th/id/OIP.vebKDzYJ3gMxDBsLiBHFWQHaHa?w=1000&h=1000&rs=1&pid=ImgDetMain",
+    "inStock": true,
+    "carbonFootprint": 4.2,
+    "materialSourcing": "good",
+    "recyclability": 85,
+    "waterUsage": "moderate",
+    "energyEfficiency": "moderate",
+    "biodegradability": 90,
+    "durability": "6 months",
+    "ecoScore": 52.84,
+    "productType": "lipstick"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ec6"
+    },
+    "name": "Velvet Glow Lipstick",
+    "description": "A luxurious, velvet-textured lipstick offering full coverage and a satin finish, enriched with antioxidants.",
+    "price": 22.5,
+    "category": "Beauty Products",
+    "image": "https://graphicsfamily.com/wp-content/uploads/edd/2020/12/Free-Lipstick-PSD-Mockup-1024x787.jpg",
+    "inStock": false,
+    "carbonFootprint": 8,
+    "materialSourcing": "better",
+    "recyclability": 80,
+    "waterUsage": "low",
+    "energyEfficiency": "high",
+    "biodegradability": 85,
+    "durability": "2 years",
+    "ecoScore": 70.1,
+    "productType": "lipstick"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ec7"
+    },
+    "name": "EcoScent Perfume",
+    "description": "A fresh, eco-friendly lavender fragrance made from sustainable ingredients, offering a soothing and calming scent.",
+    "price": 39.99,
+    "category": "Beauty Products",
+    "image": "https://www.consciouslifeandstyle.com/wp-content/uploads/2021/02/Henry-Rose-Eco-Friendly-Perfumes.jpg",
+    "inStock": true,
+    "carbonFootprint": 9.5,
+    "materialSourcing": "best",
+    "recyclability": 95,
+    "waterUsage": "low",
+    "energyEfficiency": "high",
+    "biodegradability": 100,
+    "durability": "1 year",
+    "ecoScore": 80.9,
+    "productType": "perfume"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ec8"
+    },
+    "name": "Sustainable Rose Perfume",
+    "description": "A beautiful, eco-conscious rose fragrance that combines floral notes with a hint of citrus, made from organic ingredients.",
+    "price": 45,
+    "category": "Beauty Products",
+    "image": "https://cdn.shopify.com/s/files/1/0463/7432/2326/products/C199600218_QB_600x.jpg?v=1600148459",
+    "inStock": true,
+    "carbonFootprint": 2.3,
+    "materialSourcing": "good",
+    "recyclability": 85,
+    "waterUsage": "moderate",
+    "energyEfficiency": "moderate",
+    "biodegradability": 90,
+    "durability": "2 years",
+    "ecoScore": 57.46,
+    "productType": "perfume"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ec9"
+    },
+    "name": "Luxury Oud Perfume",
+    "description": "A rich, luxurious oud perfume crafted from natural extracts and sustainably sourced materials, offering a warm and exotic fragrance.",
+    "price": 99.99,
+    "category": "Beauty Products",
+    "image": "https://media.karousell.com/media/photos/products/2023/4/25/jo_malone_english_oak__hazelnu_1682411710_dad0e0ab.jpg",
+    "inStock": false,
+    "carbonFootprint": 8,
+    "materialSourcing": "better",
+    "recyclability": 90,
+    "waterUsage": "low",
+    "energyEfficiency": "high",
+    "biodegradability": 85,
+    "durability": "3 years",
+    "ecoScore": 72.1,
+    "productType": "perfume"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5eca"
+    },
+    "name": "Man Running Shoes",
+    "description": "High-performance running shoes designed for comfort and sustainability, crafted with eco-friendly materials.",
+    "price": 89.99,
+    "category": "Footwear",
+    "image": "https://m.media-amazon.com/images/I/61qXdWV980L.SY500.jpg",
+    "inStock": true,
+    "carbonFootprint": 4.9,
+    "materialSourcing": "best",
+    "recyclability": 85,
+    "waterUsage": "low",
+    "energyEfficiency": "high",
+    "biodegradability": 90,
+    "durability": "2 years",
+    "ecoScore": 76.98,
+    "productType": "manShoes"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ecb"
+    },
+    "name": "Man Hiking Boots",
+    "description": "Rugged and durable hiking boots, made with environmentally conscious materials to withstand tough terrains.",
+    "price": 120,
+    "category": "Footwear",
+    "image": "https://m.media-amazon.com/images/I/71cflgAolqL.SY695.jpg",
+    "inStock": true,
+    "carbonFootprint": 9.5,
+    "materialSourcing": "better",
+    "recyclability": 80,
+    "waterUsage": "moderate",
+    "energyEfficiency": "moderate",
+    "biodegradability": 75,
+    "durability": "3 years",
+    "ecoScore": 62.4,
+    "productType": "manShoes"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ecc"
+    },
+    "name": "Man Leather Sneakers",
+    "description": "Stylish and comfortable sneakers made from recycled leather and natural rubber for a sustainable footwear option.",
+    "price": 79.99,
+    "category": "Footwear",
+    "image": "https://m.media-amazon.com/images/I/516LBz0R7iL.SY575.jpg",
+    "inStock": true,
+    "carbonFootprint": 5,
+    "materialSourcing": "good",
+    "recyclability": 95,
+    "waterUsage": "low",
+    "energyEfficiency": "high",
+    "biodegradability": 100,
+    "durability": "4 years",
+    "ecoScore": 68,
+    "productType": "manShoes"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ecd"
+    },
+    "name": "Women Black Heels",
+    "description": "Stylish and comfortable heels made from Eco-Friendly material, perfect for everyday wear.",
+    "price": 79.99,
+    "category": "Footwear",
+    "image": "https://th.bing.com/th/id/OIP.NnJ692e5JQx88vUgvJjBbwAAAA?w=462&h=450&rs=1&pid=ImgDetMain",
+    "inStock": true,
+    "carbonFootprint": 5.2,
+    "materialSourcing": "best",
+    "recyclability": 85,
+    "waterUsage": "low",
+    "energyEfficiency": "moderate",
+    "biodegradability": 90,
+    "durability": "3 years",
+    "ecoScore": 74.04,
+    "productType": "heels"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ece"
+    },
+    "name": "Women Stylish Heels",
+    "description": "Sleek and chic vegan heels, offering both elegance and comfort with a cruelty-free design.",
+    "price": 59.99,
+    "category": "Footwear",
+    "image": "https://i.pinimg.com/originals/07/82/8e/07828e9e5e8f7c402e3f31f4507e4533.jpg",
+    "inStock": true,
+    "carbonFootprint": 3.4,
+    "materialSourcing": "better",
+    "recyclability": 75,
+    "waterUsage": "moderate",
+    "energyEfficiency": "high",
+    "biodegradability": 80,
+    "durability": "2 years",
+    "ecoScore": 63.68,
+    "productType": "heels"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ecf"
+    },
+    "name": "Women High Heel Sandals",
+    "description": "Heels made from organic materials, combining fashion with sustainability.",
+    "price": 49.99,
+    "category": "Footwear",
+    "image": "https://th.bing.com/th/id/OIP.14ws8G6RFbnGfhO30HBD4gHaHa?w=198&h=198&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+    "inStock": true,
+    "carbonFootprint": 8.1,
+    "materialSourcing": "good",
+    "recyclability": 80,
+    "waterUsage": "low",
+    "energyEfficiency": "moderate",
+    "biodegradability": 85,
+    "durability": "2.5 years",
+    "ecoScore": 61.12,
+    "productType": "heels"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ed0"
+    },
+    "name": "Kids Eco-Friendly Shoes",
+    "description": "Durable and comfortable canvas shoes for kids, made from organic cotton and recycled materials, perfect for active play.",
+    "price": 39.99,
+    "category": "Footwear",
+    "image": "https://i5.walmartimages.com/asr/18b9bb88-404d-4b63-bed9-6e0f8c665b45.a7f7aa49a03bada0ab618d9447d8309d.jpeg",
+    "inStock": true,
+    "carbonFootprint": 3.5,
+    "materialSourcing": "best",
+    "recyclability": 90,
+    "waterUsage": "low",
+    "energyEfficiency": "moderate",
+    "biodegradability": 95,
+    "durability": "2 years",
+    "ecoScore": 75.2,
+    "productType": "kids"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ed1"
+    },
+    "name": "Kids Cheslea Boots",
+    "description": "Lightweight and breathable slip-on boots for kids,Cute and perfect for summer fun.",
+    "price": 29.99,
+    "category": "Footwear",
+    "image": "https://th.bing.com/th/id/OIP.Ia91rX2QLglGSKap4bTRdQHaHa?w=1500&h=1500&rs=1&pid=ImgDetMain",
+    "inStock": true,
+    "carbonFootprint": 2.8,
+    "materialSourcing": "better",
+    "recyclability": 85,
+    "waterUsage": "moderate",
+    "energyEfficiency": "high",
+    "biodegradability": 90,
+    "durability": "1.5 years",
+    "ecoScore": 66.56,
+    "productType": "kids"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ed2"
+    },
+    "name": "Kids Leather Boots",
+    "description": "Stylish and sturdy leather boots for kids, made from sustainable leather and designed to last through all adventures.",
+    "price": 59.99,
+    "category": "Footwear",
+    "image": "https://th.bing.com/th/id/OIP.K5BxY2cSPASyHv0XokTXKAHaHa?rs=1&pid=ImgDetMain",
+    "inStock": true,
+    "carbonFootprint": 6,
+    "materialSourcing": "good",
+    "recyclability": 70,
+    "waterUsage": "low",
+    "energyEfficiency": "moderate",
+    "biodegradability": 80,
+    "durability": "3 years",
+    "ecoScore": 58.2,
+    "productType": "kids"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ed3"
+    },
+    "name": "Unisex Purecat Slippers",
+    "description": "Comfortable and stylish unisex slides designed for casual use, made with eco-friendly materials for a soft and sustainable fit.",
+    "price": 29.99,
+    "category": "Footwear",
+    "image": "https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa,w_600,h_600/global/360262/01/sv01/fnd/IND/fmt/png/Purecat-Unisex-Slides",
+    "inStock": true,
+    "carbonFootprint": 2,
+    "materialSourcing": "best",
+    "recyclability": 95,
+    "waterUsage": "low",
+    "energyEfficiency": "high",
+    "biodegradability": 90,
+    "durability": "1.5 years",
+    "ecoScore": 78.4,
+    "productType": "slippers"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ed4"
+    },
+    "name": "Unisex Ultra-Soft Slippers",
+    "description": "Ultra-soft, non-slip slippers that provide maximum comfort, ideal for both men and women for indoor use.",
+    "price": 39.99,
+    "category": "Footwear",
+    "image": "https://m.media-amazon.com/images/I/71eTNUfoRBL._AC_UL1500_.jpg",
+    "inStock": true,
+    "carbonFootprint": 5.5,
+    "materialSourcing": "better",
+    "recyclability": 90,
+    "waterUsage": "moderate",
+    "energyEfficiency": "moderate",
+    "biodegradability": 85,
+    "durability": "2 years",
+    "ecoScore": 64.6,
+    "productType": "slippers"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ed5"
+    },
+    "name": "Unisex Cloud Slippers",
+    "description": "Comfortable and lightweight unisex slippers designed for all-day wear, made from sustainable materials and perfect for relaxation.",
+    "price": 25.99,
+    "category": "Footwear",
+    "image": "https://th.bing.com/th/id/OIP.Vm02e82HOu2GKSA1hc9_9gHaHa?w=600&h=600&rs=1&pid=ImgDetMain",
+    "inStock": true,
+    "carbonFootprint": 3,
+    "materialSourcing": "good",
+    "recyclability": 80,
+    "waterUsage": "low",
+    "energyEfficiency": "high",
+    "biodegradability": 75,
+    "durability": "1 year",
+    "ecoScore": 62.1,
+    "productType": "slippers"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ed6"
+    },
+    "name": "Travel Backpack",
+    "description": "Spacious and durable backpack made with 100% recycled materials, ideal for both travel and daily use.",
+    "price": 49.99,
+    "category": "Bags",
+    "image": "https://rukminim1.flixcart.com/image/1408/1408/backpack/e/b/j/76t-0-51-002-american-tourister-backpack-code-original-imadgh32p9t9gxmg.jpeg?q=90",
+    "inStock": true,
+    "carbonFootprint": 3.5,
+    "materialSourcing": "best",
+    "recyclability": 90,
+    "waterUsage": "low",
+    "energyEfficiency": "high",
+    "biodegradability": 80,
+    "durability": "3 years",
+    "ecoScore": 76.7,
+    "productType": "backpack"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ed7"
+    },
+    "name": "Backpack for Hiking",
+    "description": "Lightweight and comfortable daypack made from organic and sustainable materials, perfect for hiking and outdoor activities.",
+    "price": 59.99,
+    "category": "Bags",
+    "image": "https://th.bing.com/th/id/OIP.qxHsEh8sGvcpwd14O7sFVwHaHa?rs=1&pid=ImgDetMain",
+    "inStock": true,
+    "carbonFootprint": 5.9,
+    "materialSourcing": "better",
+    "recyclability": 85,
+    "waterUsage": "moderate",
+    "energyEfficiency": "moderate",
+    "biodegradability": 75,
+    "durability": "2 years",
+    "ecoScore": 62.68,
+    "productType": "backpack"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ed8"
+    },
+    "name": "Eco Backpack",
+    "description": "Stylish and versatile eco-friendly backpack designed for urban commuters, crafted from upcycled materials for sustainability.",
+    "price": 45.99,
+    "category": "Bags",
+    "image": "https://th.bing.com/th/id/OIP.oqNm32B3NbpAROdkqcJ6hAAAAA?rs=1&pid=ImgDetMain",
+    "inStock": true,
+    "carbonFootprint": 3.9,
+    "materialSourcing": "good",
+    "recyclability": 80,
+    "waterUsage": "low",
+    "energyEfficiency": "high",
+    "biodegradability": 70,
+    "durability": "2.5 years",
+    "ecoScore": 61.78,
+    "productType": "backpack"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ed9"
+    },
+    "name": "Eco Travel Bag",
+    "description": "Spacious weekender bag made from recycled polyester, perfect for short trips and weekend getaways.",
+    "price": 89.99,
+    "category": "Bags",
+    "image": "https://rukminim1.flixcart.com/image/1408/1408/duffel-bag/f/w/2/40x-0-09-009-american-tourister-travel-duffel-bag-x-bag-original-imadtscpgyd3bgy4.jpeg?q=90",
+    "inStock": true,
+    "carbonFootprint": 3.8,
+    "materialSourcing": "best",
+    "recyclability": 95,
+    "waterUsage": "low",
+    "energyEfficiency": "high",
+    "biodegradability": 85,
+    "durability": "5 years",
+    "ecoScore": 78.26,
+    "productType": "Travel"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5eda"
+    },
+    "name": "Duffel Travel Bag",
+    "description": "Durable duffel bag crafted from organic cotton and recycled materials, designed for eco-conscious travelers.",
+    "price": 79.99,
+    "category": "Bags",
+    "image": "https://m.media-amazon.com/images/I/41Ic89YbLVL._SS510_.jpg",
+    "inStock": true,
+    "carbonFootprint": 7.2,
+    "materialSourcing": "better",
+    "recyclability": 90,
+    "waterUsage": "moderate",
+    "energyEfficiency": "moderate",
+    "biodegradability": 80,
+    "durability": "4 years",
+    "ecoScore": 64.44,
+    "productType": "Travel"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5edb"
+    },
+    "name": " Travel Bag Duffel",
+    "description": "Versatile bag that can be used as both a backpack and a duffel, made with upcycled and eco-friendly materials.",
+    "price": 99.99,
+    "category": "Bags",
+    "image": "https://i.pinimg.com/originals/7d/d4/03/7dd4038ab73ccba3506d0b4de97605b7.jpg",
+    "inStock": true,
+    "carbonFootprint": 3.5,
+    "materialSourcing": "good",
+    "recyclability": 88,
+    "waterUsage": "low",
+    "energyEfficiency": "high",
+    "biodegradability": 98,
+    "durability": "4.5 years",
+    "ecoScore": 66.1,
+    "productType": "Travel"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5edc"
+    },
+    "name": "Eco Chic Handbag",
+    "description": "Stylish eco-friendly tote handbag made from recycled materials, perfect for everyday use.",
+    "price": 54.99,
+    "category": "Bags",
+    "image": "https://coach.scene7.com/is/image/Coach/c4823_lhvt5_a0?$imageRec$",
+    "inStock": true,
+    "carbonFootprint": 2.8,
+    "materialSourcing": "best",
+    "recyclability": 92,
+    "waterUsage": "low",
+    "energyEfficiency": "high",
+    "biodegradability": 75,
+    "durability": "3 years",
+    "ecoScore": 76.46,
+    "productType": "Handbag"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5edd"
+    },
+    "name": "Organic Cotton Handbag",
+    "description": "Elegant handbag crafted from organic cotton and designed with sustainability in mind, perfect for the eco-conscious fashion lover.",
+    "price": 49.99,
+    "category": "Bags",
+    "image": "https://coach.scene7.com/is/image/Coach/cp120_lhvt5_a0?$desktopProduct$",
+    "inStock": true,
+    "carbonFootprint": 3.2,
+    "materialSourcing": "better",
+    "recyclability": 85,
+    "waterUsage": "moderate",
+    "energyEfficiency": "moderate",
+    "biodegradability": 95,
+    "durability": "2 years",
+    "ecoScore": 64.14,
+    "productType": "Handbag"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ede"
+    },
+    "name": "Recycled Fabric handbag",
+    "description": "Chic shoulder handbag made from recycled fabrics, blending style and sustainability for a unique look.",
+    "price": 59.99,
+    "category": "Bags",
+    "image": "https://coach.scene7.com/is/image/Coach/ch857_lhblk_a0?$desktopProduct$",
+    "inStock": true,
+    "carbonFootprint": 6.5,
+    "materialSourcing": "good",
+    "recyclability": 88,
+    "waterUsage": "low",
+    "energyEfficiency": "high",
+    "biodegradability": 82,
+    "durability": "3.5 years",
+    "ecoScore": 65.1,
+    "productType": "Handbag"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5edf"
+    },
+    "name": "Canvas Tote Bag",
+    "description": "Sustainable and stylish canvas tote bag, perfect for daily shopping and carrying essentials.",
+    "price": 29.99,
+    "category": "Bags",
+    "image": "https://coach.scene7.com/is/image/Coach/cr710_b4ha_a0?$desktopProduct$",
+    "inStock": true,
+    "carbonFootprint": 2.5,
+    "materialSourcing": "best",
+    "recyclability": 90,
+    "waterUsage": "low",
+    "energyEfficiency": "high",
+    "biodegradability": 80,
+    "durability": "2 years",
+    "ecoScore": 76.5,
+    "productType": "Tote"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ee0"
+    },
+    "name": "Recycled Fabric Tote Bag",
+    "description": "Versatile tote bag made from recycled materials, ideal for the eco-conscious individual.",
+    "price": 34.99,
+    "category": "Bags",
+    "image": "https://coach.scene7.com/is/image/Coach/c8561_b4cah_a0?$desktopProduct$",
+    "inStock": true,
+    "carbonFootprint": 6.1,
+    "materialSourcing": "good",
+    "recyclability": 85,
+    "waterUsage": "moderate",
+    "energyEfficiency": "moderate",
+    "biodegradability": 95,
+    "durability": "2.5 years",
+    "ecoScore": 58.72,
+    "productType": "Tote"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ee1"
+    },
+    "name": "Cotton Tote Bag",
+    "description": "Spacious and sturdy tote bag crafted from organic cotton, combining durability and eco-friendliness.",
+    "price": 39.99,
+    "category": "Bags",
+    "image": "https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2F16%2Fcb%2F16cb3cba0ed24ba565489ab8a31c2aa6b3d020e5.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BDESCRIPTIVESTILLLIFE%5D%2Cres%5Bm%5D%2Chmver%5B2%5D&call=url[file:/product/main]",
+    "inStock": true,
+    "carbonFootprint": 2.8,
+    "materialSourcing": "better",
+    "recyclability": 88,
+    "waterUsage": "low",
+    "energyEfficiency": "high",
+    "biodegradability": 85,
+    "durability": "3 years",
+    "ecoScore": 70.66,
+    "productType": "Tote"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ee2"
+    },
+    "name": "Men's Formal Shirt",
+    "description": "A timeless formal shirt made from high-quality cotton for all-day comfort and style. Perfect for office wear and formal occasions.",
+    "price": 35.99,
+    "category": "Clothing",
+    "image": "https://tse1.mm.bing.net/th?id=OIP.XBDF5jYz_f7ODGYhmD0X_gAAAA&pid=Api&P=0&h=180",
+    "inStock": true,
+    "carbonFootprint": 2.8,
+    "materialSourcing": "best",
+    "recyclability": 85,
+    "waterUsage": "moderate",
+    "energyEfficiency": "high",
+    "biodegradability": 95,
+    "durability": "3 years",
+    "ecoScore": 73.06,
+    "productType": "Shirt"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ee3"
+    },
+    "name": "Slim Fit Men's Formal Shirt",
+    "description": "This sleek, slim-fit men’s formal shirt offers a modern look with premium fabric, perfect for adding elegance to your wardrobe.",
+    "price": 40.99,
+    "category": "Clothing",
+    "image": "https://tse1.mm.bing.net/th?id=OIP.OVnVEEhXsfhq4EPYJt0AawHaHa&pid=Api&P=0&h=180",
+    "inStock": true,
+    "carbonFootprint": 5.7,
+    "materialSourcing": "better",
+    "recyclability": 80,
+    "waterUsage": "low",
+    "energyEfficiency": "high",
+    "biodegradability": 70,
+    "durability": "2.5 years",
+    "ecoScore": 68.14,
+    "productType": "Shirt"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ee4"
+    },
+    "name": "Eco Men's Formal Shirt",
+    "description": "Crafted from eco-friendly bamboo fabric, this formal shirt is soft, breathable, and sustainable—ideal for a stylish and conscious choice.",
+    "price": 42.99,
+    "category": "Clothing",
+    "image": "https://www.usaclothingmanufacturers.com/wp-content/uploads/2020/09/bulk-men-single-color-formal-shirts.jpeg",
+    "inStock": true,
+    "carbonFootprint": 8.1,
+    "materialSourcing": "good",
+    "recyclability": 88,
+    "waterUsage": "low",
+    "energyEfficiency": "moderate",
+    "biodegradability": 95,
+    "durability": "3 years",
+    "ecoScore": 63.72,
+    "productType": "Shirt"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ee5"
+    },
+    "name": "Floral Anarkali Kurta",
+    "description": "A beautiful Anarkali kurta set with floral prints, paired with matching palazzo pants. Designed for comfort and elegance, perfect for festive occasions.",
+    "price": 45.99,
+    "category": "Clothing",
+    "image": "https://m.media-amazon.com/images/I/614q9dL+D4L._SY741_.jpg",
+    "inStock": true,
+    "carbonFootprint": 2.6,
+    "materialSourcing": "best",
+    "recyclability": 80,
+    "waterUsage": "moderate",
+    "energyEfficiency": "high",
+    "biodegradability": 75,
+    "durability": "2 years",
+    "ecoScore": 70.02,
+    "productType": "Kurta"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ee6"
+    },
+    "name": "Embroidered Anarkali Kurta",
+    "description": "Crafted from soft cotton, this embroidered Anarkali kurta offers a graceful flare and comfort, suitable for casual and traditional events.",
+    "price": 59.99,
+    "category": "Clothing",
+    "image": "https://assets.myntassets.com/h_200,w_200,c_fill,g_auto/h_1440,q_100,w_1080/v1/assets/images/20862810/2022/11/22/e4e30723-9097-495a-ace1-d8020926a5d51669111999441INDIECLOSETWomenCottonRoundNeck34SleeveEmbroideredFlaredKurt1.jpg",
+    "inStock": true,
+    "carbonFootprint": 9.1,
+    "materialSourcing": "better",
+    "recyclability": 85,
+    "waterUsage": "low",
+    "energyEfficiency": "moderate",
+    "biodegradability": 80,
+    "durability": "3 years",
+    "ecoScore": 67.82,
+    "productType": "Kurta"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ee7"
+    },
+    "name": "Silk Anarkali Kurta",
+    "description": "An exquisite silk Anarkali kurta with intricate patterns, designed for special occasions. This traditional piece showcases elegance and cultural heritage.",
+    "price": 65.99,
+    "category": "Clothing",
+    "image": "https://www.bunaai.com/cdn/shop/products/anarkalisalwarsuitonlineindia-1633.jpg?v=1663169320",
+    "inStock": true,
+    "carbonFootprint": 2.3,
+    "materialSourcing": "good",
+    "recyclability": 78,
+    "waterUsage": "high",
+    "energyEfficiency": "moderate",
+    "biodegradability": 70,
+    "durability": "5 years",
+    "ecoScore": 51.06,
+    "productType": "Kurta"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ee8"
+    },
+    "name": "Blue-White Jacket",
+    "description": "A comfortable and stylish blue-white sports zipper jacket designed for active wear. Perfect for workouts and casual outings, offering breathability and ease of movement.",
+    "price": 39.99,
+    "category": "Clothing",
+    "image": "https://5.imimg.com/data5/ECOM/Default/2023/5/309068955/JS/RT/XK/101368216/bluewhite-500x500.jpg",
+    "inStock": true,
+    "carbonFootprint": 2.3,
+    "materialSourcing": "best",
+    "recyclability": 80,
+    "waterUsage": "moderate",
+    "energyEfficiency": "high",
+    "biodegradability": 70,
+    "durability": "2 years",
+    "ecoScore": 69.46,
+    "productType": "Zipper"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5ee9"
+    },
+    "name": "Men's Sports Jacket",
+    "description": "This classic black sports zipper jacket combines functionality with a sleek look, suitable for both sports and casual wear. Crafted for comfort and durability.",
+    "price": 42.99,
+    "category": "Clothing",
+    "image": "https://5.imimg.com/data5/SELLER/Default/2023/1/NR/FQ/XE/40300804/men-zipper-jackets-1000x1000.jpg",
+    "inStock": true,
+    "carbonFootprint": 6.1,
+    "materialSourcing": "better",
+    "recyclability": 95,
+    "waterUsage": "low",
+    "energyEfficiency": "moderate",
+    "biodegradability": 75,
+    "durability": "3 years",
+    "ecoScore": 68.72,
+    "productType": "Zipper"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5eea"
+    },
+    "name": "Men's Sports Zipper",
+    "description": "A gray sports zipper hoodie with a cozy fit, ideal for warm-ups and cool-downs. Its versatile style and soft fabric make it a go-to choice for casual activities.",
+    "price": 49.99,
+    "category": "Clothing",
+    "image": "https://images-na.ssl-images-amazon.com/images/I/51ylk6F0rfL._AC_UY606_.jpg",
+    "inStock": true,
+    "carbonFootprint": 8.1,
+    "materialSourcing": "good",
+    "recyclability": 78,
+    "waterUsage": "high",
+    "energyEfficiency": "moderate",
+    "biodegradability": 90,
+    "durability": "5 years",
+    "ecoScore": 54.22,
+    "productType": "Zipper"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5eeb"
+    },
+    "name": "Women's Dress Plain",
+    "description": "A beautiful floral print dress that combines elegance and comfort. Perfect for casual outings and special occasions, this dress features a flattering silhouette and soft fabric.",
+    "price": 34.99,
+    "category": "Clothing",
+    "image": "https://i5.walmartimages.com/asr/4f0f511a-e097-4d8c-8e2c-977fd6fff53f_1.355b06c6f07b61138cdd66496bd074fc.jpeg",
+    "inStock": true,
+    "carbonFootprint": 2.1,
+    "materialSourcing": "best",
+    "recyclability": 80,
+    "waterUsage": "low",
+    "energyEfficiency": "high",
+    "biodegradability": 65,
+    "durability": "2 years",
+    "ecoScore": 72.92,
+    "productType": "Dress"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5eec"
+    },
+    "name": "Snowy Women's Dress",
+    "description": "This casual striped dress is both stylish and versatile. With its lightweight fabric, it’s ideal for everyday wear, offering comfort and a chic look.",
+    "price": 29.99,
+    "category": "Clothing",
+    "image": "https://i.pinimg.com/736x/d9/ec/c7/d9ecc74e3a63afa7202548b1d77d7581.jpg",
+    "inStock": true,
+    "carbonFootprint": 8.3,
+    "materialSourcing": "better",
+    "recyclability": 85,
+    "waterUsage": "moderate",
+    "energyEfficiency": "moderate",
+    "biodegradability": 70,
+    "durability": "1.5 years",
+    "ecoScore": 62.66,
+    "productType": "Dress"
+  },
+  {
+    "_id": {
+      "$oid": "673b0f5da59432e2367a5eed"
+    },
+    "name": "Elegant Women's Dress",
+    "description": "An elegant evening dress that brings sophistication to any event. Made with premium fabric, this dress is designed to provide both comfort and a luxurious look.",
+    "price": 49.99,
+    "category": "Clothing",
+    "image": "https://i5.walmartimages.com/asr/a75a9755-92e3-45a6-89da-ccfad696a798.4b175929ee12c1d4a9ca84b9728173c7.jpeg",
+    "inStock": true,
+    "carbonFootprint": 8.7,
+    "materialSourcing": "good",
+    "recyclability": 82,
+    "waterUsage": "high",
+    "energyEfficiency": "moderate",
+    "biodegradability": 100,
+    "durability": "3 years",
+    "ecoScore": 56.14,
+    "productType": "Dress"
+  }
+]
