@@ -1,18 +1,22 @@
+
 const express = require("express");
 const router = express.Router();
+
 const validateSignup = require("../Middlewares/validateSignup");
 const hashPassword = require("../Middlewares/hashPassword");
 const db = require("../db");
+
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
-const dotenv = require("dotenv");
+require("dotenv").config();
 
-dotenv.config();
-
+// Environment variables
 const JWT_SECRET = process.env.JWT_SECRET;
-const BASE_URL = process.env.BASE_URL || "https://ecoconscious.onrender.com";
+const BASE_URL = (
+  process.env.BASE_URL || "https://ecoconscious.onrender.com"
+).replace(/\/$/, "");
 
-// Email transporter config
+// Email transporter
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -20,6 +24,76 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASSWORD,
   },
 });
+
+// Generate token and send verification email
+const sendVerificationEmail = async (user) => {
+  if (!JWT_SECRET) {
+    throw new Error("JWT_SECRET is not configured");
+  }
+
+  if (!process.env.EMAIL || !process.env.EMAIL_PASSWORD) {
+    throw new Error("Email credentials are not configured");
+  }
+
+  const verificationToken = jwt.sign(
+    {
+      email: user.email,
+      purpose: "email_verification",
+    },
+    JWT_SECRET,
+    { expiresIn: "1h" }
+  );
+
+  // Save the latest verification token
+  await db.execute(
+    "UPDATE users SET verification_token = ? WHERE userid = ?",
+    [verificationToken, user.userid]
+  );
+
+  const verificationUrl =
+    `${BASE_URL}/verify?token=${encodeURIComponent(verificationToken)}`;
+
+  await transporter.sendMail({
+    from: `"EcoConscious" <${process.env.EMAIL}>`,
+    to: user.email,
+    subject: "Verify your EcoConscious account",
+
+    html: `
+      <div style="font-family: Arial, sans-serif; line-height: 1.6; padding: 20px;">
+        <h2>Welcome to EcoConscious!</h2>
+
+        <p>Hi ${user.first_name || "there"},</p>
+
+        <p>
+          Thank you for registering with EcoConscious.
+          Please verify your email address to activate your account.
+        </p>
+
+        <p>
+          <a
+            href="${verificationUrl}"
+            style="
+              background-color: #28a745;
+              color: white;
+              padding: 12px 20px;
+              text-decoration: none;
+              border-radius: 5px;
+              display: inline-block;
+            "
+          >
+            Verify Email
+          </a>
+        </p>
+
+        <p>This verification link expires in 1 hour.</p>
+
+        <p>If you did not create this account, please ignore this email.</p>
+
+        <p>Regards,<br/>EcoConscious Team</p>
+      </div>
+    `,
+  });
+};
 
 // POST /api/signup
 router.post("/", validateSignup, hashPassword, async (req, res) => {
@@ -32,31 +106,67 @@ router.post("/", validateSignup, hashPassword, async (req, res) => {
     phoneNumber,
     street,
     city,
-    state_zip
+    state_zip,
   } = req.body;
 
   try {
-    const [existingUsers] = await db.execute(
-      "SELECT userid, isVerified FROM users WHERE username = ? OR email = ?",
-      [username, email]
+    // Check whether email already exists
+    const [emailUsers] = await db.execute(
+      `SELECT userid, username, email, first_name, isVerified
+       FROM users
+       WHERE email = ?`,
+      [email]
     );
 
-    if (existingUsers.length > 0) {
-      if (existingUsers[0].isVerified === 0) {
-        return res.status(400).json({
-          message: "Email already registered but not verified. Check your inbox."
+    if (emailUsers.length > 0) {
+      const existingUser = emailUsers[0];
+
+      if (Number(existingUser.isVerified) === 0) {
+        // Resend verification email for an existing unverified account
+        await sendVerificationEmail(existingUser);
+
+        return res.status(200).json({
+          message:
+            "This email is already registered but not verified. A new verification email has been sent. Please check your inbox.",
         });
       }
-      return res.status(400).json({ message: "Username or Email is already taken" });
+
+      return res.status(409).json({
+        message: "Email is already registered. Please log in.",
+      });
     }
 
-    const verificationToken = jwt.sign({ email }, JWT_SECRET, { expiresIn: "1h" });
+    // Check whether username already exists
+    const [usernameUsers] = await db.execute(
+      "SELECT userid FROM users WHERE username = ?",
+      [username]
+    );
 
+    if (usernameUsers.length > 0) {
+      return res.status(409).json({
+        message: "Username is already taken. Please choose another username.",
+      });
+    }
+
+    // Insert new user
     const insertQuery = `
-      INSERT INTO users (username, first_name, last_name, email, password, phoneNumber, street, city, state_zip, verification_token, isVerified)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+      INSERT INTO users (
+        username,
+        first_name,
+        last_name,
+        email,
+        password,
+        phoneNumber,
+        street,
+        city,
+        state_zip,
+        verification_token,
+        isVerified
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, 0)
+    `;
 
-    await db.execute(insertQuery, [
+    const [result] = await db.execute(insertQuery, [
       username,
       first_name,
       last_name,
@@ -66,63 +176,67 @@ router.post("/", validateSignup, hashPassword, async (req, res) => {
       street,
       city,
       state_zip,
-      verificationToken,
-      0
     ]);
 
-    const verificationUrl = `${BASE_URL}/api/signup/verify?token=${verificationToken}`;
-
-    await transporter.sendMail({
-      from: `"EcoConscious" <${process.env.EMAIL}>`,
-      to: email,
-      subject: "Verify your email",
-      html: `
-        <div style="font-family: Arial, sans-serif; line-height: 1.6;">
-          <h3>Hi ${first_name},</h3>
-          <p>Welcome to <strong>EcoConscious</strong>! 🎉</p>
-          <p>To start using your account, please verify your email by clicking the button below:</p>
-          <p><a href="${verificationUrl}" style="background-color: #28a745; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; display: inline-block;">Verify Email</a></p>
-          <p>If you did not sign up, you can ignore this email.</p>
-          <p>Best,</p>
-          <p>The EcoConscious Team</p>
-        </div>
-      `,
+    // Send verification email
+    await sendVerificationEmail({
+      userid: result.insertId,
+      email,
+      first_name,
     });
 
-    res.status(200).json({ message: "Signup successful. Please verify your email." });
+    return res.status(201).json({
+      message:
+        "Signup successful! Please check your email to verify your account. The verification link expires in 1 hour.",
+    });
 
   } catch (error) {
     console.error("Signup Error:", error);
-    res.status(500).json({ message: "Internal Server Error", error: error.message });
+
+    return res.status(500).json({
+      message: "Unable to complete signup. Please try again later.",
+    });
   }
 });
 
-// GET /api/signup/verify
-router.get("/verify", async (req, res) => {
-  const { token } = req.query;
-
-  if (!token) {
-    return res.status(400).json({ message: "Invalid or expired token" });
-  }
-
+// POST /api/signup/resend-verification
+router.post("/resend-verification", async (req, res) => {
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    const email = decoded.email;
+    const { email } = req.body;
 
-    const [result] = await db.execute(
-      "UPDATE users SET isVerified = 1, verification_token = NULL WHERE email = ?",
+    if (!email) {
+      return res.status(400).json({
+        message: "Email is required.",
+      });
+    }
+
+    const [users] = await db.execute(
+      `SELECT userid, email, first_name, isVerified
+       FROM users
+       WHERE email = ?`,
       [email]
     );
 
-    if (result.affectedRows === 0) {
-      return res.status(400).json({ message: "Invalid or expired token" });
+    // Generic response avoids revealing whether an account exists
+    if (users.length === 0 || Number(users[0].isVerified) === 1) {
+      return res.status(200).json({
+        message:
+          "If an unverified account exists with this email, a verification link will be sent.",
+      });
     }
 
-    res.status(200).json({ message: "Email verified successfully! You can now log in." });
+    await sendVerificationEmail(users[0]);
+
+    return res.status(200).json({
+      message: "A new verification email has been sent. Please check your inbox.",
+    });
 
   } catch (error) {
-    console.error("Email verification error:", error);
-    res.status(400).json({ message: "Invalid or expired token" });
+    console.error("Resend Verification Error:", error);
+
+    return res.status(500).json({
+      message: "Unable to send verification email. Please try again later.",
+    });
   }
 });
 
