@@ -38,8 +38,8 @@ db.execute("SELECT 1")
     // ✅ CORS setup
     const allowedOrigins = [
   "http://localhost:5173",
-  "https://eco-conscious-n41e.vercel.app",
-  "https://eco-conscious-projects-951a6c1c.vercel.app"
+  "https://eco-conscious-nrev-git-main-kashikas-projects-951a6c1c.vercel.app",
+  "https://eco-conscious-nrev-kzby8n3wb-kashikas-projects-951a6c1c.vercel.app"
 ];
 
     const corsOptions = {
