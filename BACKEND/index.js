@@ -35,6 +35,7 @@ const port = process.env.PORT || 3000;
 // Allowed frontend domains
 const allowedOrigins = [
   "http://localhost:5173",
+  "https://eco-conscious-nrev.vercel.app",
   "https://eco-conscious-nrev-git-main-kashikas-projects-951a6c1c.vercel.app",
   "https://eco-conscious-nrev-kzby8n3wb-kashikas-projects-951a6c1c.vercel.app"
 ];
