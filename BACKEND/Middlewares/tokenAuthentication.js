@@ -1,29 +1,70 @@
+
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  console.log("Received Auth Header:", authHeader);
+    try {
+        const JWT_SECRET = process.env.JWT_SECRET;
 
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    console.log("No token found or incorrect format");
-    return res.status(401).json({ message: "Unauthorized: No token provided" });
-  }
+        if (!JWT_SECRET) {
+            console.error("JWT_SECRET is not configured");
 
-  const token = authHeader.split(" ")[1];
-  console.log("Extracted Token:", token);
+            return res.status(500).json({
+                message: "Server authentication configuration error"
+            });
+        }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) {
-      console.log("Token verification failed:", err.message);
-      return res.status(403).json({ message: "Forbidden: Invalid token" });
+        const authHeader = req.headers.authorization;
+
+        // Check Authorization header
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            return res.status(401).json({
+                message: "Unauthorized: No token provided"
+            });
+        }
+
+        // Extract token
+        const token = authHeader.split(" ")[1];
+
+        if (!token) {
+            return res.status(401).json({
+                message: "Unauthorized: Invalid token format"
+            });
+        }
+
+        // Verify JWT
+        jwt.verify(token, JWT_SECRET, (err, decoded) => {
+            if (err) {
+                console.error("Token verification failed:", err.message);
+
+                return res.status(403).json({
+                    message: "Forbidden: Invalid or expired token"
+                });
+            }
+
+            // Ensure token contains userId
+            if (!decoded.userId) {
+                return res.status(403).json({
+                    message: "Invalid token: User ID missing"
+                });
+            }
+
+            // Attach authenticated user
+            req.user = {
+                userId: decoded.userId,
+                email: decoded.email
+            };
+
+            next();
+        });
+
+    } catch (error) {
+        console.error("Authentication Error:", error);
+
+        return res.status(500).json({
+            message: "Internal authentication error"
+        });
     }
-
-    console.log("✅ Token Verified! Extracted user:", user);
-
-    req.user = { userId: user.userId, email: user.email }; // ✅ this matches your token payload
-    next();
-  });
 };
 
 module.exports = authenticateToken;
