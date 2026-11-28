@@ -1,154 +1,267 @@
-const express = require('express');
+
+const express = require("express");
 const router = express.Router();
-const connection = require('../db');
-const authenticateToken = require('../Middlewares/tokenAuthentication');
+const db = require("../db");
+const authenticateToken = require("../Middlewares/tokenAuthentication");
 
-// 🛒 PLACE ORDER from CART
-router.post('/place-order', authenticateToken, async (req, res) => {
-  try {
-    const userId = req.user.userId;
+// PLACE ORDER FROM CART
+router.post("/place-order", authenticateToken, async (req, res) => {
+    let connection;
 
-    const [cartItems] = await connection.query(
-      `SELECT c.productId, c.quantity, p.price, p.image, p.name 
-       FROM cart c 
-       JOIN products p ON c.productId = p.id 
-       WHERE c.userId = ?`,
-      [userId]
-    );
+    try {
+        const userId = req.user.userId;
 
-    if (cartItems.length === 0) {
-      return res.status(400).json({ message: 'Your cart is empty!' });
+        connection = await db.getConnection();
+        await connection.beginTransaction();
+
+        // Fetch cart items and current product details
+        const [cartItems] = await connection.execute(
+            `SELECT 
+                c.productId,
+                c.quantity,
+                p.price,
+                p.image,
+                p.name
+             FROM cart c
+             INNER JOIN products p ON c.productId = p.id
+             WHERE c.userId = ?
+             FOR UPDATE`,
+            [userId]
+        );
+
+        if (cartItems.length === 0) {
+            await connection.rollback();
+
+            return res.status(400).json({
+                message: "Your cart is empty!"
+            });
+        }
+
+        let totalPrice = 0;
+
+        for (const item of cartItems) {
+            const quantity = Number(item.quantity);
+            const price = Number(item.price);
+
+            if (!Number.isInteger(quantity) || quantity < 1 || quantity > 20 ||
+                !Number.isFinite(price) || price < 0) {
+                throw new Error("Invalid cart item quantity or price");
+            }
+
+            totalPrice += price * quantity;
+        }
+
+        // Create order
+        const [orderResult] = await connection.execute(
+            `INSERT INTO orders (userId, totalPrice, createdAt)
+             VALUES (?, ?, NOW())`,
+            [userId, totalPrice]
+        );
+
+        const orderId = orderResult.insertId;
+
+        // Insert order items
+        for (const item of cartItems) {
+            await connection.execute(
+                `INSERT INTO order_items
+                 (orderId, productId, quantity, price, image, name)
+                 VALUES (?, ?, ?, ?, ?, ?)`,
+                [
+                    orderId,
+                    item.productId,
+                    item.quantity,
+                    item.price,
+                    item.image || null,
+                    item.name
+                ]
+            );
+        }
+
+        // Clear user's cart
+        await connection.execute(
+            "DELETE FROM cart WHERE userId = ?",
+            [userId]
+        );
+
+        await connection.commit();
+
+        return res.status(201).json({
+            message: "Order placed successfully!",
+            order: { _id: orderId }
+        });
+
+    } catch (error) {
+        if (connection) {
+            await connection.rollback();
+        }
+
+        console.error("Place Order Error:", error);
+
+        return res.status(500).json({
+            message: "Error placing order. Please try again."
+        });
+
+    } finally {
+        if (connection) {
+            connection.release();
+        }
     }
-
-    let totalPrice = 0;
-    cartItems.forEach(item => {
-      totalPrice += item.price * item.quantity;
-    });
-
-    const [orderResult] = await connection.query(
-      `INSERT INTO orders (userId, totalPrice, createdAt) VALUES (?, ?, NOW())`,
-      [userId, totalPrice]
-    );
-
-    const orderId = orderResult.insertId;
-
-    for (const item of cartItems) {
-      await connection.query(
-        `INSERT INTO order_items (orderId, productId, quantity, price, image, name) 
-         VALUES (?, ?, ?, ?, ?, ?)`,
-        [orderId, item.productId, item.quantity, item.price, item.image, item.name]
-      );
-    }
-
-    await connection.query(`DELETE FROM cart WHERE userId = ?`, [userId]);
-
-    res.status(201).json({
-      message: 'Order placed successfully!',
-      order: { _id: orderId }
-    });
-  } catch (error) {
-    console.error('🔥 Error placing order (cart):', error);
-    res.status(500).json({ message: 'Error placing order. Please try again.' });
-  }
 });
 
-// 💳 BUY NOW (single product)
-router.post('/buy-now', authenticateToken, async (req, res) => {
-  try {
-    const userId = req.user.userId;
-    const { productId, quantity, price, image } = req.body;
 
-    if (!productId || !quantity || !price) {
-      return res.status(400).json({ message: 'Missing required fields' });
+// BUY NOW - SINGLE PRODUCT
+router.post("/buy-now", authenticateToken, async (req, res) => {
+    let connection;
+
+    try {
+        const userId = req.user.userId;
+        const { productId, quantity, image } = req.body;
+
+        if (
+            !productId ||
+            !Number.isInteger(Number(quantity)) ||
+            Number(quantity) < 1 ||
+            Number(quantity) > 20
+        ) {
+            return res.status(400).json({
+                message: "Invalid product or quantity"
+            });
+        }
+
+        connection = await db.getConnection();
+        await connection.beginTransaction();
+
+        // Always get the actual price from database
+        const [products] = await connection.execute(
+            `SELECT id, name, price, image
+             FROM products
+             WHERE id = ?`,
+            [productId]
+        );
+
+        if (products.length === 0) {
+            await connection.rollback();
+
+            return res.status(404).json({
+                message: "Product not found"
+            });
+        }
+
+        const product = products[0];
+        const finalPrice = Number(product.price);
+        const finalQuantity = Number(quantity);
+
+        if (!Number.isFinite(finalPrice) || finalPrice < 0) {
+            throw new Error("Invalid product price");
+        }
+
+        const totalPrice = finalPrice * finalQuantity;
+
+        const [orderResult] = await connection.execute(
+            `INSERT INTO orders (userId, totalPrice, createdAt)
+             VALUES (?, ?, NOW())`,
+            [userId, totalPrice]
+        );
+
+        const orderId = orderResult.insertId;
+
+        await connection.execute(
+            `INSERT INTO order_items
+             (orderId, productId, quantity, price, image, name)
+             VALUES (?, ?, ?, ?, ?, ?)`,
+            [
+                orderId,
+                product.id,
+                finalQuantity,
+                finalPrice,
+                product.image || image || null,
+                product.name
+            ]
+        );
+
+        await connection.commit();
+
+        return res.status(201).json({
+            message: "Order placed successfully!",
+            order: { _id: orderId }
+        });
+
+    } catch (error) {
+        if (connection) {
+            await connection.rollback();
+        }
+
+        console.error("Buy Now Error:", error);
+
+        return res.status(500).json({
+            message: "Error placing order. Please try again."
+        });
+
+    } finally {
+        if (connection) {
+            connection.release();
+        }
     }
-
-    const totalPrice = quantity * price;
-
-    // Fetch product name for the given productId
-    const [productRes] = await connection.query(
-      `SELECT name FROM products WHERE id = ?`,
-      [productId]
-    );
-    const name = productRes[0]?.name || "Product";
-
-    const [orderResult] = await connection.query(
-      `INSERT INTO orders (userId, totalPrice, createdAt) VALUES (?, ?, NOW())`,
-      [userId, totalPrice]
-    );
-
-    const orderId = orderResult.insertId;
-
-    await connection.query(
-      `INSERT INTO order_items (orderId, productId, quantity, price, image, name) 
-       VALUES (?, ?, ?, ?, ?, ?)`,
-      [orderId, productId, quantity, price, image || null, name]
-    );
-
-    res.status(201).json({
-      message: 'Order placed successfully!',
-      order: { _id: orderId }
-    });
-  } catch (error) {
-    console.error('🔥 Error placing order (buy-now):', error);
-    res.status(500).json({ message: 'Error placing order. Please try again.' });
-  }
 });
 
-// 📦 GET ORDER DETAILS by ID
-router.get('/:orderId', authenticateToken, async (req, res) => {
-  try {
-    const orderId = req.params.orderId;
 
-    const [orders] = await connection.query(
-      `SELECT * FROM orders WHERE id = ?`,
-      [orderId]
-    );
+// GET ORDER DETAILS
+router.get("/:orderId", authenticateToken, async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const orderId = req.params.orderId;
 
-    if (orders.length === 0) {
-      return res.status(404).json({ message: 'Order not found' });
+        if (!/^\d+$/.test(orderId)) {
+            return res.status(400).json({
+                message: "Invalid order ID"
+            });
+        }
+
+        const [orders] = await db.execute(
+            `SELECT *
+             FROM orders
+             WHERE id = ? AND userId = ?`,
+            [orderId, userId]
+        );
+
+        if (orders.length === 0) {
+            return res.status(404).json({
+                message: "Order not found"
+            });
+        }
+
+        const [items] = await db.execute(
+            `SELECT productId, quantity, price, image, name
+             FROM order_items
+             WHERE orderId = ?`,
+            [orderId]
+        );
+
+        const transformedItems = items.map(item => ({
+            productId: {
+                _id: item.productId,
+                name: item.name,
+                image: item.image,
+                price: item.price
+            },
+            quantity: item.quantity,
+            price: item.price
+        }));
+
+        return res.status(200).json({
+            order: {
+                ...orders[0],
+                items: transformedItems
+            }
+        });
+
+    } catch (error) {
+        console.error("Get Order Error:", error);
+
+        return res.status(500).json({
+            message: "Error fetching order data"
+        });
     }
-
-    const [items] = await connection.query(
-      `SELECT productId, quantity, price, image, name FROM order_items WHERE orderId = ?`,
-      [orderId]
-    );
-
-    const transformedItems = items.map(item => ({
-      productId: {
-        _id: item.productId,
-        name: item.name,
-        image: item.image,
-        price: item.price
-      },
-      quantity: item.quantity
-    }));
-
-    res.status(200).json({ order: { ...orders[0], items: transformedItems } });
-  } catch (error) {
-    console.error('🔥 Error fetching order:', error);
-    res.status(500).json({ message: 'Error fetching order data' });
-  }
-});
-
-// 🔍 GET PRODUCT BY ID
-router.get('/api/products/:id', async (req, res) => {
-  try {
-    const productId = req.params.id;
-
-    const [results] = await connection.query(
-      `SELECT * FROM products WHERE id = ?`,
-      [productId]
-    );
-
-    if (results.length === 0) {
-      return res.status(404).json({ message: 'Product not found' });
-    }
-
-    res.json(results[0]);
-  } catch (err) {
-    console.error('🔥 Error retrieving product:', err);
-    res.status(500).json({ message: 'Error retrieving product', error: err });
-  }
 });
 
 module.exports = router;
