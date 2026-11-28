@@ -1,39 +1,39 @@
+
 const express = require("express");
-const mysql = require("mysql2/promise");
-const dotenv = require("dotenv");
-dotenv.config();
 const router = express.Router();
-const pool = mysql.createPool({
-  host: process.env.DB_HOST || "localhost",
-  user: process.env.DB_USER || "root",
-  password: process.env.DB_PASS || "",
-  database: process.env.DB_NAME || "your_database",
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
-});
+const db = require("../db");
+
 router.get("/", async (req, res) => {
-  try {
-    const connection = await pool.getConnection();
-    const query = `
-      SELECT p.*
-      FROM products p
-      INNER JOIN (
-          SELECT category, MAX(ecoScore) AS maxEcoScore
-          FROM products
-          WHERE category IN ('Beauty Products', 'Clothing', 'Footwear', 'Bags')
-          GROUP BY category
-      ) best ON p.category = best.category AND p.ecoScore = best.maxEcoScore;
-    `;
-    const [rows] = await connection.query(query);
-    connection.release();
-    if (rows.length === 0) {
-      return res.status(404).json({ message: "No products found in any category" });
+    try {
+        const query = `
+            SELECT p.*
+            FROM products p
+            INNER JOIN (
+                SELECT category, MAX(ecoScore) AS maxEcoScore
+                FROM products
+                WHERE category IN (
+                    'Beauty Products',
+                    'Clothing',
+                    'Footwear',
+                    'Bags'
+                )
+                GROUP BY category
+            ) best
+            ON p.category = best.category
+            AND p.ecoScore = best.maxEcoScore
+        `;
+
+        const [rows] = await db.execute(query);
+
+        return res.status(200).json(rows);
+
+    } catch (error) {
+        console.error("Best Products Error:", error);
+
+        return res.status(500).json({
+            message: "Unable to fetch best products"
+        });
     }
-    res.json(rows);
-  } catch (error) {
-    console.error("Error fetching products:", error);
-    res.status(500).json({ message: "Server error" });
-  }
 });
+
 module.exports = router;
